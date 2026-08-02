@@ -379,9 +379,23 @@
 
 <script>
 // ============================================================
-// 潮汕美食数据库
+// 潮汕美食数据库（从外部 JSON 加载，修改后自动生效）
 // ============================================================
-const DISHES = [
+let DISHES = [];
+const DISHES_URL = 'https://qq2793310956-sketch.github.io/chaoshan-foodx/dishes.json';
+
+async function loadDishes() {
+  try {
+    const resp = await fetch(DISHES_URL);
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    DISHES = await resp.json();
+  } catch(e) {
+    // 如果加载失败，用内置兜底数据
+    DISHES = BACKUP_DISHES;
+  }
+  return DISHES;
+}
+const BACKUP_DISHES = [
   // 粿类
   { id:1,  name:'牛肉粿条',   cat:'粿类', emoji:'🍜', meal:'lunch',    tags:['主食','牛肉','汤'],     desc:'潮汕人的灵魂食物，鲜牛肉片铺在热腾腾的粿条上，浇上滚烫的牛骨汤，配沙茶酱或辣椒酱，一口下去鲜香滑嫩。' },
   { id:2,  name:'红桃粿',     cat:'粿类', emoji:'🥟', meal:'breakfast', tags:['传统','糯米','节日'],   desc:'潮汕传统粿品，糯米粉制成桃形外皮，内馅有糯米香菇花生等，蒸熟后粉红可爱，是过年过节必备。' },
@@ -721,7 +735,7 @@ function showToast(msg) {
 // ============================================================
 // 初始化
 // ============================================================
-function init() {
+async function init() {
   // 日期显示
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
@@ -729,6 +743,8 @@ function init() {
   document.getElementById('dateDisplay').textContent =
     `${tomorrow.getFullYear()}年${tomorrow.getMonth()+1}月${tomorrow.getDate()}日 星期${wd[tomorrow.getDay()]}`;
 
+  // 先从外部加载菜单数据，再渲染
+  await loadDishes();
   renderRecPage();
 }
 
