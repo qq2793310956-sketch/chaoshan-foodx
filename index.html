@@ -163,8 +163,8 @@ function daily(){
 }
 var cr=daily();
 
-function rdr(){
-  cr=daily();
+function rdr(data){
+  if(data)cr=data;else cr=daily();
   var h='';
   meals.forEach(function(m,i){
     var d=cr[m];
@@ -198,7 +198,7 @@ function rnd(){
   });
   for(var i=0;i<arr.length;i++){if(!used[arr[i].id]){cr.star=arr[i];break;}}
   if(!cr.star)cr.star=arr[0];
-  rdr();
+  rdr(cr);
   var t=document.createElement('div');
   t.style.cssText='position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(0,0,0,.75);color:#FFF;padding:10px 24px;border-radius:10px;font-size:14px;z-index:999;pointer-events:none';
   t.textContent='已刷新✨';document.body.appendChild(t);
