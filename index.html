@@ -3,782 +3,389 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>🍲 明天吃啥 — 潮汕美食每日推荐</title>
+<title>明天吃啥 — 潮汕美食每日推荐</title>
 <style>
-  :root {
-    --red: #E85D3F;
-    --red-light: #FFF0EC;
-    --gold: #FFB347;
-    --bg: #FFF8F3;
-    --card: #FFFFFF;
-    --text: #333;
-    --text-light: #999;
-    --shadow: 0 2px 16px rgba(0,0,0,0.06);
-  }
+  :root { --red: #E85D3F; --red-light: #FFF0EC; --bg: #FFF8F3; --card: #FFFFFF; --text: #333; --text-light: #999; --shadow: 0 2px 16px rgba(0,0,0,0.06); }
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Helvetica Neue", sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    -webkit-tap-highlight-color: transparent;
-    user-select: none;
-  }
-
-  /* ===== 顶部横幅 ===== */
-  .hero {
-    background: linear-gradient(135deg, #E85D3F, #FF7B5C 30%, #FF9A76 65%, #FFB347);
-    padding: 36px 20px 32px;
-    text-align: center;
-    color: #FFF;
-    position: relative;
-    overflow: hidden;
-  }
-  .hero::after {
-    content: '';
-    position: absolute;
-    top: -40px; right: -30px;
-    width: 140px; height: 140px;
-    background: rgba(255,255,255,0.06);
-    border-radius: 50%;
-  }
-  .hero::before {
-    content: '';
-    position: absolute;
-    bottom: -50px; left: -40px;
-    width: 180px; height: 180px;
-    background: rgba(255,255,255,0.04);
-    border-radius: 50%;
-  }
-  .hero * { position: relative; z-index: 1; }
-  .hero-title {
-    font-size: 36px;
-    font-weight: 800;
-    letter-spacing: 2px;
-    text-shadow: 0 2px 8px rgba(0,0,0,0.12);
-  }
-  .hero-sub {
-    font-size: 14px;
-    opacity: 0.9;
-    margin: 6px 0 10px;
-  }
-  .hero-date {
-    display: inline-block;
-    font-size: 13px;
-    background: rgba(255,255,255,0.2);
-    padding: 4px 20px;
-    border-radius: 20px;
-    backdrop-filter: blur(4px);
-  }
-
-  /* ===== Tab 切换 ===== */
-  .tabs {
-    display: flex;
-    margin: -16px 16px 0;
-    position: relative;
-    z-index: 10;
-    background: #FFF;
-    border-radius: 16px;
-    padding: 4px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-  }
-  .tab {
-    flex: 1;
-    text-align: center;
-    padding: 12px 0;
-    font-size: 15px;
-    font-weight: 600;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: all 0.2s;
-    color: #999;
-  }
-  .tab.active {
-    background: var(--red-light);
-    color: var(--red);
-  }
-
-  /* ===== 通用区块 ===== */
+  body { font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; -webkit-tap-highlight-color: transparent; }
+  .hero { background: linear-gradient(135deg, #E85D3F, #FF7B5C, #FF9A76, #FFB347); padding: 36px 20px 32px; text-align: center; color: #FFF; position: relative; overflow: hidden; }
+  .hero-title { font-size: 36px; font-weight: 800; letter-spacing: 2px; text-shadow: 0 2px 8px rgba(0,0,0,0.12); position: relative; z-index: 1; }
+  .hero-sub { font-size: 14px; opacity: 0.9; margin: 6px 0 10px; position: relative; z-index: 1; }
+  .hero-date { display: inline-block; font-size: 13px; background: rgba(255,255,255,0.2); padding: 4px 20px; border-radius: 20px; position: relative; z-index: 1; }
+  .tab-bar { display: flex; margin: -16px 16px 0; position: relative; z-index: 10; background: #FFF; border-radius: 16px; padding: 4px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+  .tab { flex: 1; text-align: center; padding: 12px 0; font-size: 15px; font-weight: 600; border-radius: 12px; cursor: pointer; transition: all 0.2s; color: #999; border: none; background: none; }
+  .tab.active { background: var(--red-light); color: var(--red); }
   .section { margin: 16px; }
-  .section-title {
-    font-size: 20px;
-    font-weight: 700;
-    margin-bottom: 4px;
-  }
-  .section-desc {
-    font-size: 12px;
-    color: var(--text-light);
-    margin-bottom: 12px;
-  }
-
-  /* ===== 推荐卡片 ===== */
+  .section-title { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+  .section-desc { font-size: 12px; color: var(--text-light); margin-bottom: 12px; }
   .meal-list { display: flex; flex-direction: column; gap: 12px; }
-  .meal-card {
-    border-radius: 16px;
-    padding: 18px;
-    background: var(--card);
-    box-shadow: var(--shadow);
-    border-left: 5px solid #DDD;
-    cursor: pointer;
-    transition: transform 0.15s;
-  }
+  .meal-card { border-radius: 16px; padding: 18px; background: var(--card); box-shadow: var(--shadow); border-left: 5px solid #DDD; cursor: pointer; transition: transform 0.15s; }
   .meal-card:active { transform: scale(0.98); }
   .meal-card.breakfast { border-left-color: #FFB347; background: linear-gradient(135deg, #FFFDF7, #FFF9E6); }
-  .meal-card.lunch     { border-left-color: #E85D3F; background: linear-gradient(135deg, #FFFDFB, #FFF0EC); }
-  .meal-card.dinner    { border-left-color: #6B7BD0; background: linear-gradient(135deg, #FBFBFF, #F0F0FF); }
-  .meal-card.snack     { border-left-color: #5CB85C; background: linear-gradient(135deg, #F9FFF9, #F0FFEF); }
-  .meal-tag { font-size: 12px; font-weight: 600; color: #888; margin-bottom: 8px; }
+  .meal-card.lunch { border-left-color: #E85D3F; background: linear-gradient(135deg, #FFFDFB, #FFF0EC); }
+  .meal-card.dinner { border-left-color: #6B7BD0; background: linear-gradient(135deg, #FBFBFF, #F0F0FF); }
+  .meal-card.snack { border-left-color: #5CB85C; background: linear-gradient(135deg, #F9FFF9, #F0FFEF); }
+  .meal-header { font-size: 12px; font-weight: 600; color: #888; margin-bottom: 8px; }
   .meal-row { display: flex; align-items: center; gap: 14px; }
   .meal-emoji { font-size: 52px; flex-shrink: 0; }
   .meal-info { flex: 1; min-width: 0; }
   .meal-name { font-size: 22px; font-weight: 700; }
   .meal-cat { font-size: 12px; color: var(--text-light); }
-  .meal-desc {
-    font-size: 13px; color: #777; line-height: 1.5; margin-top: 8px;
-    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
-  }
-  .meal-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
-  .tag {
-    font-size: 11px; color: var(--red); background: rgba(232,93,63,0.08);
-    padding: 2px 10px; border-radius: 10px;
-  }
-
-  /* ===== 主打星 ===== */
-  .star-card {
-    background: linear-gradient(135deg, #FFFEF5, #FFF8E1);
-    border: 2px solid #FFD54F;
-    border-radius: 16px;
-    padding: 18px;
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    cursor: pointer;
-    box-shadow: 0 4px 16px rgba(255,193,7,0.15);
-  }
+  .meal-desc { font-size: 13px; color: #777; line-height: 1.5; margin-top: 8px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .tag { font-size: 11px; color: var(--red); background: rgba(232,93,63,0.08); padding: 2px 10px; border-radius: 10px; }
+  .star-card { background: linear-gradient(135deg, #FFFEF5, #FFF8E1); border: 2px solid #FFD54F; border-radius: 16px; padding: 18px; display: flex; align-items: center; gap: 14px; cursor: pointer; box-shadow: 0 4px 16px rgba(255,193,7,0.15); }
   .star-card:active { transform: scale(0.98); }
   .star-emoji { font-size: 60px; flex-shrink: 0; }
   .star-info { flex: 1; min-width: 0; }
   .star-name { font-size: 20px; font-weight: 700; }
   .star-cat { font-size: 12px; color: var(--text-light); }
-  .star-desc {
-    font-size: 13px; color: #888; line-height: 1.5; margin-top: 4px;
-    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
-  }
-
-  /* ===== 按钮 ===== */
+  .star-desc { font-size: 13px; color: #888; line-height: 1.5; margin-top: 4px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
   .actions { margin: 12px 16px; display: flex; gap: 10px; }
-  .btn {
-    flex: 1;
-    padding: 14px 0;
-    font-size: 16px;
-    font-weight: 600;
-    border-radius: 50px;
-    border: none;
-    cursor: pointer;
-    text-align: center;
-    transition: all 0.2s;
-  }
+  .btn { flex: 1; padding: 14px 0; font-size: 16px; font-weight: 600; border-radius: 50px; border: none; cursor: pointer; text-align: center; transition: all 0.2s; }
   .btn:active { transform: scale(0.96); }
-  .btn-primary {
-    background: linear-gradient(135deg, #E85D3F, #FF7B5C);
-    color: #FFF;
-    box-shadow: 0 4px 16px rgba(232,93,63,0.3);
-  }
-  .btn-outline {
-    background: #FFF;
-    color: var(--red);
-    border: 2px solid var(--red);
-  }
-
-  /* ===== 图鉴页 ===== */
-  .search-wrap {
-    margin: 12px 16px;
-    background: #FFF;
-    border-radius: 50px;
-    padding: 10px 18px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    box-shadow: var(--shadow);
-  }
-  .search-wrap input {
-    flex: 1; border: none; outline: none; font-size: 15px; background: transparent; color: #333;
-  }
+  .btn-primary { background: linear-gradient(135deg, #E85D3F, #FF7B5C); color: #FFF; box-shadow: 0 4px 16px rgba(232,93,63,0.3); }
+  .btn-outline { background: #FFF; color: var(--red); border: 2px solid var(--red); }
+  .search-wrap { margin: 12px 16px; background: #FFF; border-radius: 50px; padding: 10px 18px; display: flex; align-items: center; gap: 8px; box-shadow: var(--shadow); }
+  .search-wrap input { flex: 1; border: none; outline: none; font-size: 15px; background: transparent; color: #333; }
   .search-wrap input::placeholder { color: #CCC; }
-
-  .cat-scroll {
-    display: flex; gap: 8px; padding: 4px 16px 8px;
-    overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none;
-  }
+  .cat-scroll { display: flex; gap: 8px; padding: 4px 16px 8px; overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none; }
   .cat-scroll::-webkit-scrollbar { display: none; }
-  .cat-chip {
-    flex-shrink: 0;
-    padding: 8px 16px;
-    font-size: 13px;
-    border-radius: 20px;
-    background: #FFF;
-    border: 1.5px solid #EEE;
-    cursor: pointer;
-    white-space: nowrap;
-    transition: all 0.2s;
-  }
+  .cat-chip { flex-shrink: 0; padding: 8px 16px; font-size: 13px; border-radius: 20px; background: #FFF; border: 1.5px solid #EEE; cursor: pointer; white-space: nowrap; transition: all 0.2s; }
   .cat-chip.active { background: var(--red-light); border-color: var(--red); color: var(--red); font-weight: 600; }
-
   .dish-list { margin: 8px 16px; display: flex; flex-direction: column; gap: 10px; }
-  .dish-card {
-    background: #FFF;
-    border-radius: 14px;
-    padding: 14px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    box-shadow: var(--shadow);
-    cursor: pointer;
-    transition: transform 0.15s;
-  }
+  .dish-card { background: #FFF; border-radius: 14px; padding: 14px; display: flex; align-items: center; gap: 12px; box-shadow: var(--shadow); cursor: pointer; transition: transform 0.15s; }
   .dish-card:active { transform: scale(0.98); }
-  .dish-icon {
-    width: 60px; height: 60px;
-    background: var(--bg);
-    border-radius: 14px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 36px;
-    flex-shrink: 0;
-  }
+  .dish-icon { width: 60px; height: 60px; background: var(--bg); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 36px; flex-shrink: 0; }
   .dish-body { flex: 1; min-width: 0; }
   .dish-body .name { font-size: 16px; font-weight: 600; margin-bottom: 2px; }
   .dish-body .meta { font-size: 11px; color: var(--text-light); margin-bottom: 3px; }
   .dish-body .meta span { margin-right: 8px; }
-  .dish-body .desc {
-    font-size: 12px; color: #AAA;
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  }
+  .dish-body .desc { font-size: 12px; color: #AAA; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .dish-arrow { font-size: 22px; color: #CCC; }
-
   .empty { text-align: center; padding: 60px 0; color: #CCC; }
-  .empty-icon { font-size: 60px; display: block; margin-bottom: 10px; }
-
-  /* ===== 弹窗详情 ===== */
-  .overlay {
-    position: fixed; inset: 0; background: rgba(0,0,0,0.45);
-    z-index: 200;
-    display: flex; align-items: flex-end; justify-content: center;
-    animation: fadeIn 0.2s;
-  }
+  .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 200; display: flex; align-items: flex-end; justify-content: center; animation: fadeIn 0.2s; }
   @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
   @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-  .modal {
-    background: #FFF;
-    border-radius: 24px 24px 0 0;
-    width: 100%;
-    max-width: 500px;
-    max-height: 85vh;
-    overflow-y: auto;
-    padding: 32px 24px 40px;
-    animation: slideUp 0.3s;
-    position: relative;
-  }
-  .modal-close {
-    position: absolute; top: 16px; right: 20px;
-    width: 32px; height: 32px;
-    background: #F5F5F5;
-    border-radius: 50%;
-    border: none;
-    font-size: 18px;
-    cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    color: #999;
-  }
+  .modal { background: #FFF; border-radius: 24px 24px 0 0; width: 100%; max-width: 500px; max-height: 85vh; overflow-y: auto; padding: 32px 24px 40px; animation: slideUp 0.3s; position: relative; }
+  .modal-close { position: absolute; top: 16px; right: 20px; width: 32px; height: 32px; background: #F5F5F5; border-radius: 50%; border: none; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #999; }
   .modal-emoji { font-size: 100px; text-align: center; display: block; margin-bottom: 12px; }
   .modal-name { font-size: 28px; font-weight: 700; text-align: center; margin-bottom: 8px; }
   .modal-badges { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; }
-  .modal-badge {
-    font-size: 13px; padding: 4px 16px; border-radius: 20px;
-  }
+  .modal-badge { font-size: 13px; padding: 4px 16px; border-radius: 20px; }
   .modal-badge.cat { background: var(--red-light); color: var(--red); }
   .modal-badge.meal { background: #F5F5F5; color: #666; }
   .modal-desc { font-size: 15px; color: #555; line-height: 1.8; margin-bottom: 16px; }
   .modal-section { margin-bottom: 14px; }
   .modal-section .label { font-size: 13px; font-weight: 600; color: #888; margin-bottom: 6px; }
   .modal-tags { display: flex; flex-wrap: wrap; gap: 8px; }
-  .modal-tags .t {
-    font-size: 12px; color: var(--red); background: rgba(232,93,63,0.06);
-    padding: 4px 14px; border-radius: 16px;
-    border: 1px solid rgba(232,93,63,0.12);
-  }
+  .modal-tag { font-size: 12px; color: var(--red); background: rgba(232,93,63,0.06); padding: 4px 14px; border-radius: 16px; border: 1px solid rgba(232,93,63,0.12); }
   .pair-item { display: flex; align-items: center; gap: 8px; font-size: 14px; color: #666; margin-bottom: 6px; }
-
-  /* ===== Toast ===== */
-  .toast {
-    position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-    background: rgba(0,0,0,0.75); color: #FFF;
-    padding: 10px 24px; border-radius: 10px;
-    font-size: 14px; z-index: 999;
-    pointer-events: none;
-    animation: toastIn 0.2s, toastOut 0.3s 1s forwards;
-  }
-  @keyframes toastIn { from { opacity: 0; transform: translate(-50%,-50%) scale(0.8); } }
-  @keyframes toastOut { to { opacity: 0; } }
-
-  /* 响应式: 大屏居中 */
-  @media (min-width: 600px) {
-    body { max-width: 500px; margin: 0 auto; box-shadow: 0 0 40px rgba(0,0,0,0.08); min-height: 100vh; }
-  }
+  @media (min-width: 600px) { body { max-width: 500px; margin: 0 auto; box-shadow: 0 0 40px rgba(0,0,0,0.08); min-height: 100vh; } }
 </style>
 </head>
 <body>
 
-<!-- ========== 顶部 ========== -->
 <div class="hero">
-  <div class="hero-title">🍲 明天吃啥？</div>
+  <div class="hero-title" id="title">🍲 明天吃啥？</div>
   <div class="hero-sub">潮汕美食每日推荐</div>
   <div class="hero-date" id="dateDisplay"></div>
 </div>
 
-<!-- ========== Tab ========== -->
-<div class="tabs">
-  <div class="tab active" data-tab="recommend" onclick="switchTab('recommend')">🎯 明日推荐</div>
-  <div class="tab" data-tab="browse" onclick="switchTab('browse')">📚 美食图鉴</div>
+<div class="tab-bar">
+  <button class="tab active" onclick="showTab('rec')">🎯 明日推荐</button>
+  <button class="tab" onclick="showTab('browse')">📚 美食图鉴</button>
 </div>
 
-<!-- ========== 推荐页 ========== -->
-<div id="page-recommend">
-
+<div id="page-rec" style="padding-bottom: 24px;">
   <div class="section" style="margin-top:20px;">
     <div class="section-title">📅 明天菜单</div>
     <div class="section-desc">基于日期智能推荐，每天不重样</div>
-    <div class="meal-list" id="mealList"></div>
+    <div class="meal-list" id="mealList">加载中...</div>
   </div>
-
   <div class="section">
     <div class="section-title">⭐ 明日主打星</div>
-    <div class="star-card" id="starCard" onclick="showDetail(currentStar.id)"></div>
+    <div class="star-card" id="starCard" onclick="openDetail(currentStar.id)" style="display:none;"></div>
   </div>
-
   <div class="actions">
-    <button class="btn btn-primary" onclick="refreshRec()">🔄 换个口味</button>
-    <button class="btn btn-outline" onclick="switchTab('browse')">📚 浏览图鉴</button>
+    <button class="btn btn-primary" onclick="refresh()">🔄 换个口味</button>
+    <button class="btn btn-outline" onclick="showTab('browse')">📚 浏览图鉴</button>
   </div>
 </div>
 
-<!-- ========== 图鉴页 ========== -->
 <div id="page-browse" style="display:none; padding-bottom: 24px;">
   <div class="search-wrap">
     <span>🔍</span>
-    <input type="text" id="searchInput" placeholder="搜索潮汕美食..." oninput="applyFilter()">
-    <span id="searchClear" style="display:none;cursor:pointer;color:#CCC;font-size:18px;" onclick="clearSearch()">✕</span>
+    <input type="text" id="searchInput" placeholder="搜索..." oninput="filterBrowse()">
+    <span id="searchClear" style="display:none;cursor:pointer;color:#CCC;font-size:18px;" onclick="document.getElementById('searchInput').value='';filterBrowse();">✕</span>
   </div>
   <div class="cat-scroll" id="catScroll"></div>
   <div class="dish-list" id="dishList"></div>
 </div>
 
-<!-- ========== 弹窗 ========== -->
-<div class="overlay" id="overlay" style="display:none;" onclick="closeModal(event)">
+<div class="overlay" id="overlay" style="display:none;" onclick="if(event.target===this)closeDetail()">
   <div class="modal" id="modal"></div>
 </div>
 
 <script>
-// ============================================================
-// 潮汕美食数据库（从外部 JSON 加载，修改后自动生效）
-// ============================================================
-let DISHES = null; // 稍后在 BACKUP_DISHES 定义后初始化
-const DISHES_URL = 'https://qq2793310956-sketch.github.io/chaoshan-foodx/dishes.json?v=3';
+// ============ DATA ============
+var BUILTIN = [
+  {id:1,name:'牛肉粿条',cat:'粿类',emoji:'🍜',meal:'lunch',tags:["主食", "牛肉", "汤"],desc:'潮汕人的灵魂食物，鲜牛肉片铺在热腾腾的粿条上，浇上滚烫的牛骨汤，配沙茶酱或辣椒酱，一口下去鲜香滑嫩。'},
+  {id:2,name:'红桃粿',cat:'粿类',emoji:'🥟',meal:'breakfast',tags:["传统", "糯米", "节日"],desc:'潮汕传统粿品，糯米粉制成桃形外皮，内馅有糯米香菇花生等，蒸熟后粉红可爱，是过年过节必备。'},
+  {id:3,name:'菜头粿',cat:'粿类',emoji:'🫓',meal:'breakfast',tags:["煎炸", "萝卜", "小吃"],desc:'萝卜糕的潮汕版本，白萝卜丝与米浆蒸制，切块煎至两面金黄，外酥里嫩，蘸鱼露或辣椒酱绝配。'},
+  {id:4,name:'鼠壳粿',cat:'粿类',emoji:'🌿',meal:'breakfast',tags:["传统", "糯米", "甜品"],desc:'用鼠壳草汁染成墨绿色的糯米粿，内馅豆沙或花生芝麻，带独特草本清香，清明时节应季美味。'},
+  {id:5,name:'无米粿',cat:'粿类',emoji:'🫕',meal:'snack',tags:["素食", "煎炸", "小吃"],desc:'用番薯粉做皮，包入韭菜、豆芽等馅料，煎至透明晶莹，外Q内香，潮汕经典素粿。'},
+  {id:6,name:'潮汕生腌',cat:'海鲜',emoji:'🦀',meal:'dinner',tags:["生食", "螃蟹", "虾", "重口味"],desc:'被誉为「潮汕毒药」，酱油蒜头辣椒香菜腌制鲜活蟹虾，生猛鲜美，吃过就上瘾。初次尝试建议配热粥。'},
+  {id:7,name:'蚝烙',cat:'海鲜',emoji:'🦪',meal:'lunch',tags:["煎炸", "蚝", "鸡蛋"],desc:'鲜蚝与番薯粉浆混合煎制，加鸡蛋和葱花，煎到金黄酥脆。外酥里嫩，蚝肉鲜甜与蛋香交融。'},
+  {id:8,name:'鱼饭',cat:'海鲜',emoji:'🐟',meal:'dinner',tags:["传统", "冷食", "鱼"],desc:'潮汕渔民古老智慧——新鲜海鱼直接用海水煮熟放凉，鱼肉紧实鲜甜，冷吃更显鲜美。配白粥或普宁豆酱。'},
+  {id:9,name:'虾丸虾枣',cat:'海鲜',emoji:'🦐',meal:'lunch',tags:["丸子", "虾", "火锅"],desc:'手打鲜虾肉制成，弹牙爽口，虾味浓郁。可煮汤、油炸或下火锅，潮汕宴席必备硬菜。'},
+  {id:10,name:'炒薄壳',cat:'海鲜',emoji:'🐚',meal:'dinner',tags:["小炒", "贝壳", "下酒"],desc:'薄壳（海瓜子）是潮汕人心头好，加九层塔（金不换）、蒜蓉辣椒爆炒，鲜香四溢，一粒一粒停不下来。'},
+  {id:11,name:'卤鹅',cat:'卤味',emoji:'🦆',meal:'dinner',tags:["卤水", "鹅", "宴客"],desc:'潮汕卤水巅峰之作，狮头鹅经数小时卤制，皮滑肉嫩，卤香入骨。鹅肝、鹅掌、鹅翅、鹅肠各自精彩，配蒜泥醋解腻。'},
+  {id:12,name:'卤水拼盘',cat:'卤味',emoji:'🍖',meal:'dinner',tags:["卤水", "拼盘", "下酒"],desc:'鹅肉、猪耳、豆干、卤蛋等多样卤味切片拼盘，一碟尝遍卤水精华，下饭下酒两相宜。'},
+  {id:13,name:'隆江猪脚饭',cat:'卤味',emoji:'🍖',meal:'lunch',tags:["卤水", "猪肉", "米饭", "快餐"],desc:'源自揭阳隆江，猪脚用秘制卤水长时间熬煮，皮糯肉烂、胶质满满，浇在热米饭上，配酸菜解腻。'},
+  {id:14,name:'牛肉丸汤',cat:'汤品',emoji:'🍢',meal:'lunch',tags:["丸子", "牛肉", "汤"],desc:'潮汕手打牛肉丸，弹到可以当乒乓球打。配清汤和蒜头酥、芹菜末，简单纯粹，却鲜掉眉毛。'},
+  {id:15,name:'猪肚汤',cat:'汤品',emoji:'🍲',meal:'dinner',tags:["猪肚", "滋补", "汤"],desc:'猪肚与胡椒、酸菜同煲，汤色乳白，胡椒辛香暖胃驱寒，酸菜提鲜解腻，潮汕人冬季滋补首选。'},
+  {id:16,name:'潮汕砂锅粥',cat:'汤品',emoji:'🥣',meal:'dinner',tags:["粥", "海鲜", "夜宵"],desc:'不同于广式粥的绵密，潮汕粥粒粒分明米香浓郁。加入虾蟹、田鸡或排骨同熬，鲜甜渗透每粒米。'},
+  {id:17,name:'芥兰炒牛肉',cat:'小炒',emoji:'🥬',meal:'lunch',tags:["家常", "牛肉", "蔬菜"],desc:'潮汕经典家常菜，脆嫩芥兰与嫩滑牛肉片爆炒，镬气十足。芥兰清甜与牛肉鲜美相得益彰。'},
+  {id:18,name:'菜脯蛋',cat:'小炒',emoji:'🍳',meal:'breakfast',tags:["家常", "鸡蛋", "快手"],desc:'潮汕最家常的味道——萝卜干（菜脯）切碎与蛋液混合煎成，咸香脆口，配白粥就是完美一餐。'},
+  {id:19,name:'潮州蒸鱼',cat:'小炒',emoji:'🐠',meal:'dinner',tags:["鱼", "清蒸", "家常"],desc:'新鲜海鱼加酸梅、咸菜、姜丝、番茄清蒸，酸甜咸鲜层层递进。不破坏鱼肉本味的同时增添丰富层次。'},
+  {id:20,name:'普宁豆酱炒通菜',cat:'小炒',emoji:'🥗',meal:'lunch',tags:["家常", "蔬菜", "素食"],desc:'空心菜用普宁豆酱炒制，豆酱的咸鲜酵香与脆嫩通菜是天生一对，简单快手却下饭一流。'},
+  {id:21,name:'潮汕甜汤',cat:'甜点',emoji:'🍯',meal:'snack',tags:["甜品", "滋补", "热食"],desc:'不是糖水，是「甜汤」。芋头、白果、薏米、莲子、银耳等慢火熬制，温润滋补，甜而不腻。'},
+  {id:22,name:'芋泥',cat:'甜点',emoji:'🍠',meal:'snack',tags:["甜品", "芋头", "传统"],desc:'选用潮汕特产香芋蒸熟压泥，加猪油和糖炒至绵密顺滑，入口即化。可做芋泥白果、芋泥月饼等。'},
+  {id:23,name:'绿豆爽',cat:'甜点',emoji:'🫘',meal:'snack',tags:["甜品", "绿豆", "夏季"],desc:'去皮绿豆煮至绵软，加冰糖和马蹄粒，清香爽口，夏天冰镇后喝一碗消暑解热赛过任何冷饮。'},
+  {id:24,name:'反沙芋',cat:'甜点',emoji:'🧈',meal:'snack',tags:["甜品", "芋头", "传统"],desc:'芋头条炸至金黄裹上白糖霜，外甜内酥、粉糯香甜。看似简单，火候功夫全在「反沙」这一步。'},
+  {id:25,name:'春卷',cat:'小吃',emoji:'🥐',meal:'snack',tags:["煎炸", "传统", "小吃"],desc:'潮汕春卷皮薄馅大，绿豆畔、肉末、香菇等入馅，炸至金黄酥脆，咬下去咔嚓作响满口留香。'},
+  {id:26,name:'猪肠胀糯米',cat:'小吃',emoji:'🌭',meal:'snack',tags:["糯米", "猪肉", "传统"],desc:'猪肠洗净灌入糯米、花生、香菇、猪肉等，煮熟切片蘸甜酱油或桔油，糯香与腊味交融，独特又上瘾。'},
+  {id:27,name:'肠粉',cat:'小吃',emoji:'📜',meal:'breakfast',tags:["米浆", "早餐", "快手"],desc:'潮汕肠粉比广式更薄更滑，内馅丰富（牛肉/猪肉/虾仁/鸡蛋/生菜），淋特制酱汁和蒜头油。'},
+  {id:28,name:'炒糕粿',cat:'小吃',emoji:'🧈',meal:'snack',tags:["煎炸", "米浆", "传统"],desc:'米浆糕切块煎至两面金黄，加鸡蛋、豆芽、韭菜同炒，外焦里糯，蘸白糖吃是潮汕独特风味。'},
+  {id:29,name:'潮州粥',cat:'主食',emoji:'🍚',meal:'breakfast',tags:["粥", "家常", "日常"],desc:'潮汕人日常必备，米粒分明米汤清甜。配橄榄菜、咸菜、菜脯蛋、卤味等各种杂咸，简简单单就是家的味道。'},
+  {id:30,name:'戈饭',cat:'主食',emoji:'🍛',meal:'lunch',tags:["米饭", "家常", "芋头"],desc:'潮汕版焖饭，芋头、腊肉、香菇等与米饭同煮，开锅时香气四溢。每一粒米都吸饱了食材精华。'},
+  {id:31,name:'猪排',cat:'家常菜',emoji:'🍖',meal:'lunch',tags:["猪肉", "煎炸", "家常"],desc:'大块猪排腌制入味后煎至两面金黄，外酥里嫩、肉汁饱满，配米饭或意面都绝佳。'},
+  {id:32,name:'小酥肉',cat:'家常菜',emoji:'🥩',meal:'snack',tags:["猪肉", "煎炸", "小吃"],desc:'猪肉条裹上薄薄的面糊炸至金黄酥脆，外酥里嫩、咸香可口，撒上椒盐或蘸番茄酱都好吃。'},
+  {id:33,name:'可乐鸡翅',cat:'家常菜',emoji:'🍗',meal:'lunch',tags:["鸡肉", "可乐", "家常"],desc:'鸡翅用可乐和酱油炖煮，甜咸交织、色泽红亮，鸡肉嫩滑入味，大人小孩都爱吃。'},
+  {id:34,name:'青椒炒肉',cat:'家常菜',emoji:'🫑',meal:'lunch',tags:["猪肉", "辣椒", "家常"],desc:'经典家常菜，猪肉片与青椒爆炒，肉嫩椒香、镬气十足，下饭一绝。'},
+  {id:35,name:'炒花甲',cat:'海鲜',emoji:'🐚',meal:'dinner',tags:["贝壳", "小炒", "下酒"],desc:'花甲吐沙后加蒜蓉辣椒爆炒，壳开肉嫩、鲜美多汁，汤汁拌饭也是一绝。'},
+  {id:36,name:'蒜香螃蟹',cat:'海鲜',emoji:'🦀',meal:'dinner',tags:["螃蟹", "蒜香", "宴客"],desc:'螃蟹斩件后加大量蒜蓉爆炒，蒜香四溢、蟹肉鲜甜，吮指回味。'},
+  {id:37,name:'茄子煲',cat:'家常菜',emoji:'🍆',meal:'lunch',tags:["蔬菜", "家常", "下饭"],desc:'茄子切块过油后入砂锅焖煮，加肉末和酱汁，软糯入味、咸香微辣，米饭杀手。'},
+  {id:38,name:'苦瓜炒蛋',cat:'家常菜',emoji:'🥒',meal:'lunch',tags:["鸡蛋", "苦瓜", "家常"],desc:'苦瓜切薄片与鸡蛋同炒，苦中回甘、蛋香浓郁，清热解暑又下饭。'},
+  {id:39,name:'西红柿炒蛋',cat:'家常菜',emoji:'🍅',meal:'lunch',tags:["鸡蛋", "番茄", "家常", "快手"],desc:'国民家常菜，番茄酸甜与鸡蛋嫩滑完美融合，简单快手却百吃不厌。'},
+  {id:40,name:'炒莲藕',cat:'家常菜',emoji:'🪷',meal:'lunch',tags:["蔬菜", "家常", "清爽"],desc:'莲藕切片清炒，脆嫩爽口、清甜回甘，加少许醋更添风味，清爽解腻。'},
+  {id:41,name:'红烧排骨',cat:'家常菜',emoji:'🍖',meal:'dinner',tags:["猪肉", "红烧", "硬菜"],desc:'排骨焯水后加酱油糖色慢炖，肉质酥烂、酱香浓郁，色泽红亮，宴客硬菜。'},
+  {id:42,name:'炸鸡翅',cat:'小吃',emoji:'🍗',meal:'snack',tags:["鸡肉", "煎炸", "小吃"],desc:'鸡翅腌制后裹粉油炸至金黄酥脆，外皮香脆、肉质嫩滑多汁，蘸番茄酱或甜辣酱。'},
+  {id:43,name:'炒空心菜',cat:'家常菜',emoji:'🥬',meal:'lunch',tags:["蔬菜", "家常", "快手"],desc:'空心菜摘段猛火快炒，加蒜末提香，碧绿脆嫩、蒜香扑鼻，最简单的家常味道。'},
+  {id:44,name:'鲍鱼汤',cat:'汤品',emoji:'🥣',meal:'dinner',tags:["海鲜", "滋补", "高档"],desc:'鲜活鲍鱼与鸡肉、瑶柱等同炖，汤色清澈、鲜味醇厚，一口就能喝出海洋的味道。'},
+  {id:45,name:'玉米排骨汤',cat:'汤品',emoji:'🌽',meal:'dinner',tags:["排骨", "玉米", "滋补"],desc:'排骨与甜玉米慢火熬煮，汤色乳白、玉米清甜融入骨汤，温润滋补、老少皆宜。'},
+  {id:46,name:'虫草花鸡肉汤',cat:'汤品',emoji:'🍄',meal:'dinner',tags:["鸡肉", "滋补", "药膳"],desc:'虫草花与土鸡同炖，金黄澄澈、菌香四溢，滋补养颜，一锅暖到心里。'},
+  {id:47,name:'竹笋汤',cat:'汤品',emoji:'🎋',meal:'lunch',tags:["竹笋", "清淡", "汤"],desc:'鲜竹笋切片与排骨或鸡骨架煲汤，清甜鲜嫩、笋香馥郁，春日时令鲜美。'},
+  {id:48,name:'竹笋炒肉',cat:'家常菜',emoji:'🎋',meal:'lunch',tags:["竹笋", "猪肉", "家常"],desc:'鲜嫩竹笋与猪肉片爆炒，笋脆肉嫩、清爽鲜香，春天的味道。'},
+  {id:49,name:'小番茄',cat:'小吃',emoji:'🍅',meal:'snack',tags:["水果", "清爽", "零食"],desc:'新鲜小番茄洗净即可食用，酸甜多汁、清爽解腻，也可搭配话梅粉增添风味。'},
+  {id:50,name:'杏鲍菇炒牛肉',cat:'家常菜',emoji:'🍄',meal:'dinner',tags:["牛肉", "菌菇", "下饭"],desc:'杏鲍菇切条与嫩牛肉片同炒，菇肉质感弹牙、牛肉嫩滑，黑胡椒调味，香气四溢。'},
+  {id:51,name:'湿炒牛肉',cat:'家常菜',emoji:'🥩',meal:'lunch',tags:["牛肉", "湿炒", "潮汕"],desc:'潮汕湿炒做法，牛肉片滑嫩多汁，勾薄芡使酱汁包裹每片肉，配芥兰或青椒，拌饭一绝。'},
+  {id:52,name:'炒粉',cat:'主食',emoji:'🍝',meal:'lunch',tags:["粉面", "家常", "快手"],desc:'米粉或河粉加鸡蛋、豆芽、肉丝猛火快炒，干香入味、镬气十足，街头最受欢迎的主食。'},
+  {id:53,name:'炒饭',cat:'主食',emoji:'🍚',meal:'lunch',tags:["米饭", "家常", "快手"],desc:'隔夜米饭加鸡蛋、火腿、虾仁等配料炒制，粒粒分明、香浓可口，一碟满足。'}
+];
+var DISHES = BUILTIN;
+var CATS = [
+  {name:'全部',emoji:'🔥'},{name:'粿类',emoji:'🥟'},{name:'海鲜',emoji:'🦀'},{name:'卤味',emoji:'🍖'},
+  {name:'家常菜',emoji:'🏠'},{name:'汤品',emoji:'🍲'},{name:'小炒',emoji:'🥬'},{name:'甜点',emoji:'🍯'},
+  {name:'小吃',emoji:'🥐'},{name:'主食',emoji:'🍚'}
+];
+var MEAL = {breakfast:'🌅 早餐',lunch:'☀️ 午餐',dinner:'🌙 晚餐',snack:'🍪 小吃点心'};
 
-async function loadDishes() {
-  try {
-    const resp = await fetch(DISHES_URL, { cache: 'no-cache' });
-    if (!resp.ok) throw new Error('HTTP ' + resp.status);
-    const remoteData = await resp.json();
-    if (Array.isArray(remoteData) && remoteData.length > 0) {
-      DISHES = remoteData;
+// ============ LOAD ============
+function loadData(cb) {
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', 'https://qq2793310956-sketch.github.io/chaoshan-foodx/dishes.json?v=4', true);
+  xhr.timeout = 5000;
+  xhr.onload = function() {
+    if (xhr.status === 200) {
+      try {
+        var data = JSON.parse(xhr.responseText);
+        if (data && data.length > 0) { DISHES = data; }
+      } catch(e) {}
     }
-  } catch(e) {
-    // 加载失败，继续用内置数据
-  }
-  return DISHES;
-}
-const BACKUP_DISHES = [
-  // 粿类
-  { id:1,  name:'牛肉粿条',   cat:'粿类', emoji:'🍜', meal:'lunch',    tags:['主食','牛肉','汤'],     desc:'潮汕人的灵魂食物，鲜牛肉片铺在热腾腾的粿条上，浇上滚烫的牛骨汤，配沙茶酱或辣椒酱，一口下去鲜香滑嫩。' },
-  { id:2,  name:'红桃粿',     cat:'粿类', emoji:'🥟', meal:'breakfast', tags:['传统','糯米','节日'],   desc:'潮汕传统粿品，糯米粉制成桃形外皮，内馅有糯米香菇花生等，蒸熟后粉红可爱，是过年过节必备。' },
-  { id:3,  name:'菜头粿',     cat:'粿类', emoji:'🫓', meal:'breakfast', tags:['煎炸','萝卜','小吃'],   desc:'萝卜糕的潮汕版本，白萝卜丝与米浆蒸制，切块煎至两面金黄，外酥里嫩，蘸鱼露或辣椒酱绝配。' },
-  { id:4,  name:'鼠壳粿',     cat:'粿类', emoji:'🌿', meal:'breakfast', tags:['传统','糯米','甜品'],   desc:'用鼠壳草汁染成墨绿色的糯米粿，内馅豆沙或花生芝麻，带独特草本清香，清明时节应季美味。' },
-  { id:5,  name:'无米粿',     cat:'粿类', emoji:'🫕', meal:'snack',    tags:['素食','煎炸','小吃'],   desc:'用番薯粉做皮，包入韭菜、豆芽等馅料，煎至透明晶莹，外Q内香，潮汕经典素粿。' },
-  // 海鲜
-  { id:6,  name:'潮汕生腌',   cat:'海鲜', emoji:'🦀', meal:'dinner',   tags:['生食','螃蟹','虾','重口味'], desc:'被誉为"潮汕毒药"，酱油蒜头辣椒香菜腌制鲜活蟹虾，生猛鲜美，吃过就上瘾。初次尝试建议配热粥。' },
-  { id:7,  name:'蚝烙',       cat:'海鲜', emoji:'🦪', meal:'lunch',    tags:['煎炸','蚝','鸡蛋'],    desc:'鲜蚝与番薯粉浆混合煎制，加鸡蛋和葱花，煎到金黄酥脆。外酥里嫩，蚝肉鲜甜与蛋香交融。' },
-  { id:8,  name:'鱼饭',       cat:'海鲜', emoji:'🐟', meal:'dinner',   tags:['传统','冷食','鱼'],     desc:'潮汕渔民古老智慧——新鲜海鱼直接用海水煮熟放凉，鱼肉紧实鲜甜，冷吃更显鲜美。配白粥或普宁豆酱。' },
-  { id:9,  name:'虾丸/虾枣',  cat:'海鲜', emoji:'🦐', meal:'lunch',    tags:['丸子','虾','火锅'],    desc:'手打鲜虾肉制成，弹牙爽口，虾味浓郁。可煮汤、油炸或下火锅，潮汕宴席必备硬菜。' },
-  { id:10, name:'炒薄壳',     cat:'海鲜', emoji:'🐚', meal:'dinner',   tags:['小炒','贝壳','下酒'],   desc:'薄壳（海瓜子）是潮汕人心头好，加九层塔（金不换）、蒜蓉辣椒爆炒，鲜香四溢，一粒一粒停不下来。' },
-  // 卤味
-  { id:11, name:'卤鹅',       cat:'卤味', emoji:'🦆', meal:'dinner',   tags:['卤水','鹅','宴客'],    desc:'潮汕卤水巅峰之作，狮头鹅经数小时卤制，皮滑肉嫩，卤香入骨。鹅肝、鹅掌、鹅翅、鹅肠各自精彩，配蒜泥醋解腻。' },
-  { id:12, name:'卤水拼盘',   cat:'卤味', emoji:'🍖', meal:'dinner',   tags:['卤水','拼盘','下酒'],   desc:'鹅肉、猪耳、豆干、卤蛋等多样卤味切片拼盘，一碟尝遍卤水精华，下饭下酒两相宜。' },
-  { id:13, name:'隆江猪脚饭', cat:'卤味', emoji:'🍖', meal:'lunch',    tags:['卤水','猪肉','米饭','快餐'], desc:'源自揭阳隆江，猪脚用秘制卤水长时间熬煮，皮糯肉烂、胶质满满，浇在热米饭上，配酸菜解腻。' },
-  // 汤品
-  { id:14, name:'牛肉丸汤',   cat:'汤品', emoji:'🍢', meal:'lunch',    tags:['丸子','牛肉','汤'],    desc:'潮汕手打牛肉丸，弹到可以当乒乓球打。配清汤和蒜头酥、芹菜末，简单纯粹，却鲜掉眉毛。' },
-  { id:15, name:'猪肚汤',     cat:'汤品', emoji:'🍲', meal:'dinner',   tags:['猪肚','滋补','汤'],    desc:'猪肚与胡椒、酸菜同煲，汤色乳白，胡椒辛香暖胃驱寒，酸菜提鲜解腻，潮汕人冬季滋补首选。' },
-  { id:16, name:'潮汕砂锅粥', cat:'汤品', emoji:'🥣', meal:'dinner',   tags:['粥','海鲜','夜宵'],    desc:'不同于广式粥的绵密，潮汕粥粒粒分明米香浓郁。加入虾蟹、田鸡或排骨同熬，鲜甜渗透每粒米。' },
-  // 小炒
-  { id:17, name:'芥兰炒牛肉', cat:'小炒', emoji:'🥬', meal:'lunch',    tags:['家常','牛肉','蔬菜'],   desc:'潮汕经典家常菜，脆嫩芥兰与嫩滑牛肉片爆炒，镬气十足。芥兰清甜与牛肉鲜美相得益彰。' },
-  { id:18, name:'菜脯蛋',     cat:'小炒', emoji:'🍳', meal:'breakfast',tags:['家常','鸡蛋','快手'],   desc:'潮汕最家常的味道——萝卜干（菜脯）切碎与蛋液混合煎成，咸香脆口，配白粥就是完美一餐。' },
-  { id:19, name:'潮州蒸鱼',   cat:'小炒', emoji:'🐠', meal:'dinner',   tags:['鱼','清蒸','家常'],    desc:'新鲜海鱼加酸梅、咸菜、姜丝、番茄清蒸，酸甜咸鲜层层递进。不破坏鱼肉本味的同时增添丰富层次。' },
-  { id:20, name:'普宁豆酱炒通菜',cat:'小炒',emoji:'🥗',meal:'lunch',  tags:['家常','蔬菜','素食'],   desc:'空心菜用普宁豆酱炒制，豆酱的咸鲜酵香与脆嫩通菜是天生一对，简单快手却下饭一流。' },
-  // 甜点
-  { id:21, name:'潮汕甜汤',   cat:'甜点', emoji:'🍯', meal:'snack',    tags:['甜品','滋补','热食'],   desc:'不是糖水，是"甜汤"。芋头、白果、薏米、莲子、银耳等慢火熬制，温润滋补，甜而不腻。' },
-  { id:22, name:'芋泥',       cat:'甜点', emoji:'🍠', meal:'snack',    tags:['甜品','芋头','传统'],   desc:'选用潮汕特产香芋蒸熟压泥，加猪油和糖炒至绵密顺滑，入口即化。可做芋泥白果、芋泥月饼等。' },
-  { id:23, name:'绿豆爽',     cat:'甜点', emoji:'🫘', meal:'snack',    tags:['甜品','绿豆','夏季'],   desc:'去皮绿豆煮至绵软，加冰糖和马蹄粒，清香爽口，夏天冰镇后喝一碗消暑解热赛过任何冷饮。' },
-  { id:24, name:'反沙芋',     cat:'甜点', emoji:'🧈', meal:'snack',    tags:['甜品','芋头','传统'],   desc:'芋头条炸至金黄裹上白糖霜，外甜内酥、粉糯香甜。看似简单，火候功夫全在"反沙"这一步。' },
-  // 小吃
-  { id:25, name:'春卷',       cat:'小吃', emoji:'🥐', meal:'snack',    tags:['煎炸','传统','小吃'],   desc:'潮汕春卷皮薄馅大，绿豆畔、肉末、香菇等入馅，炸至金黄酥脆，咬下去咔嚓作响满口留香。' },
-  { id:26, name:'猪肠胀糯米', cat:'小吃', emoji:'🌭', meal:'snack',    tags:['糯米','猪肉','传统'],   desc:'猪肠洗净灌入糯米、花生、香菇、猪肉等，煮熟切片蘸甜酱油或桔油，糯香与腊味交融，独特又上瘾。' },
-  { id:27, name:'肠粉',       cat:'小吃', emoji:'📜', meal:'breakfast',tags:['米浆','早餐','快手'],   desc:'潮汕肠粉比广式更薄更滑，内馅丰富（牛肉/猪肉/虾仁/鸡蛋/生菜），淋特制酱汁和蒜头油。' },
-  { id:28, name:'炒糕粿',     cat:'小吃', emoji:'🧈', meal:'snack',    tags:['煎炸','米浆','传统'],   desc:'米浆糕切块煎至两面金黄，加鸡蛋、豆芽、韭菜同炒，外焦里糯，蘸白糖吃是潮汕独特风味。' },
-  // 主食
-  { id:29, name:'潮州粥',     cat:'主食', emoji:'🍚', meal:'breakfast',tags:['粥','家常','日常'],    desc:'潮汕人日常必备，米粒分明米汤清甜。配橄榄菜、咸菜、菜脯蛋、卤味等各种杂咸，简简单单就是家的味道。' },
-  { id:30, name:'戈饭',       cat:'主食', emoji:'🍛', meal:'lunch',    tags:['米饭','家常','芋头'],   desc:'潮汕版焖饭，芋头、腊肉、香菇等与米饭同煮，开锅时香气四溢。每一粒米都吸饱了食材精华。' }
-  { id:31, name:'猪排',       cat:'家常菜', emoji:'🍖', meal:'lunch',    tags:['猪肉','煎炸','家常'],   desc:'大块猪排腌制入味后煎至两面金黄，外酥里嫩、肉汁饱满，配米饭或意面都绝佳。' },
-  { id:32, name:'小酥肉',     cat:'家常菜', emoji:'🥩', meal:'snack',    tags:['猪肉','煎炸','小吃'],   desc:'猪肉条裹上薄薄的面糊炸至金黄酥脆，外酥里嫩、咸香可口，撒上椒盐或蘸番茄酱都好吃。' },
-  { id:33, name:'可乐鸡翅',   cat:'家常菜', emoji:'🍗', meal:'lunch',    tags:['鸡肉','可乐','家常'],   desc:'鸡翅用可乐和酱油炖煮，甜咸交织、色泽红亮，鸡肉嫩滑入味，大人小孩都爱吃。' },
-  { id:34, name:'青椒炒肉',   cat:'家常菜', emoji:'🫑', meal:'lunch',    tags:['猪肉','辣椒','家常'],   desc:'经典家常菜，猪肉片与青椒爆炒，肉嫩椒香、镬气十足，下饭一绝。' },
-  { id:35, name:'炒花甲',     cat:'海鲜', emoji:'🐚', meal:'dinner',   tags:['贝壳','小炒','下酒'],   desc:'花甲吐沙后加蒜蓉辣椒爆炒，壳开肉嫩、鲜美多汁，汤汁拌饭也是一绝。' },
-  { id:36, name:'蒜香螃蟹',   cat:'海鲜', emoji:'🦀', meal:'dinner',   tags:['螃蟹','蒜香','宴客'],   desc:'螃蟹斩件后加大量蒜蓉爆炒，蒜香四溢、蟹肉鲜甜，吮指回味。' },
-  { id:37, name:'茄子煲',     cat:'家常菜', emoji:'🍆', meal:'lunch',    tags:['蔬菜','家常','下饭'],   desc:'茄子切块过油后入砂锅焖煮，加肉末和酱汁，软糯入味、咸香微辣，米饭杀手。' },
-  { id:38, name:'苦瓜炒蛋',   cat:'家常菜', emoji:'🥒', meal:'lunch',    tags:['鸡蛋','苦瓜','家常'],   desc:'苦瓜切薄片与鸡蛋同炒，苦中回甘、蛋香浓郁，清热解暑又下饭。' },
-  { id:39, name:'西红柿炒蛋', cat:'家常菜', emoji:'🍅', meal:'lunch',    tags:['鸡蛋','番茄','家常','快手'], desc:'国民家常菜，番茄酸甜与鸡蛋嫩滑完美融合，简单快手却百吃不厌。' },
-  { id:40, name:'炒莲藕',     cat:'家常菜', emoji:'🪷', meal:'lunch',    tags:['蔬菜','家常','清爽'],   desc:'莲藕切片清炒，脆嫩爽口、清甜回甘，加少许醋更添风味，清爽解腻。' },
-  { id:41, name:'红烧排骨',   cat:'家常菜', emoji:'🍖', meal:'dinner',   tags:['猪肉','红烧','硬菜'],   desc:'排骨焯水后加酱油糖色慢炖，肉质酥烂、酱香浓郁，色泽红亮，宴客硬菜。' },
-  { id:42, name:'炸鸡翅',     cat:'小吃', emoji:'🍗', meal:'snack',    tags:['鸡肉','煎炸','小吃'],   desc:'鸡翅腌制后裹粉油炸至金黄酥脆，外皮香脆、肉质嫩滑多汁，蘸番茄酱或甜辣酱。' },
-  { id:43, name:'炒空心菜',   cat:'家常菜', emoji:'🥬', meal:'lunch',    tags:['蔬菜','家常','快手'],   desc:'空心菜摘段猛火快炒，加蒜末提香，碧绿脆嫩、蒜香扑鼻，最简单的家常味道。' },
-  { id:44, name:'鲍鱼汤',     cat:'汤品', emoji:'🥣', meal:'dinner',   tags:['海鲜','滋补','高档'],   desc:'鲜活鲍鱼与鸡肉、瑶柱等同炖，汤色清澈、鲜味醇厚，一口就能喝出海洋的味道。' },
-  { id:45, name:'玉米排骨汤', cat:'汤品', emoji:'🌽', meal:'dinner',   tags:['排骨','玉米','滋补'],   desc:'排骨与甜玉米慢火熬煮，汤色乳白、玉米清甜融入骨汤，温润滋补、老少皆宜。' },
-  { id:46, name:'虫草花鸡肉汤',cat:'汤品', emoji:'🍄', meal:'dinner',   tags:['鸡肉','滋补','药膳'],   desc:'虫草花与土鸡同炖，金黄澄澈、菌香四溢，滋补养颜，一锅暖到心里。' },
-  { id:47, name:'竹笋汤',     cat:'汤品', emoji:'🎋', meal:'lunch',    tags:['竹笋','清淡','汤'],    desc:'鲜竹笋切片与排骨或鸡骨架煲汤，清甜鲜嫩、笋香馥郁，春日时令鲜美。' },
-  { id:48, name:'竹笋炒肉',   cat:'家常菜', emoji:'🎋', meal:'lunch',    tags:['竹笋','猪肉','家常'],   desc:'鲜嫩竹笋与猪肉片爆炒，笋脆肉嫩、清爽鲜香，春天的味道。' },
-  { id:49, name:'小番茄',     cat:'小吃', emoji:'🍅', meal:'snack',    tags:['水果','清爽','零食'],   desc:'新鲜小番茄洗净即可食用，酸甜多汁、清爽解腻，也可搭配话梅粉增添风味。' },
-  { id:50, name:'杏鲍菇炒牛肉',cat:'家常菜', emoji:'🍄', meal:'dinner',   tags:['牛肉','菌菇','下饭'],   desc:'杏鲍菇切条与嫩牛肉片同炒，菇肉质感弹牙、牛肉嫩滑，黑胡椒调味，香气四溢。' },
-  { id:51, name:'湿炒牛肉',   cat:'家常菜', emoji:'🥩', meal:'lunch',    tags:['牛肉','湿炒','潮汕'],   desc:'潮汕湿炒做法，牛肉片滑嫩多汁，勾薄芡使酱汁包裹每片肉，配芥兰或青椒，拌饭一绝。' },
-  { id:52, name:'炒粉',       cat:'主食', emoji:'🍝', meal:'lunch',    tags:['粉面','家常','快手'],   desc:'米粉或河粉加鸡蛋、豆芽、肉丝猛火快炒，干香入味、镬气十足，街头最受欢迎的主食。' },
-  { id:53, name:'炒饭',       cat:'主食', emoji:'🍚', meal:'lunch',    tags:['米饭','家常','快手'],   desc:'隔夜米饭加鸡蛋、火腿、虾仁等配料炒制，粒粒分明、香浓可口，一碟满足。' },
-];
-// 用备份数据初始化 DISHES，确保页面始终有内容
-DISHES = [...BACKUP_DISHES];
-
-const MEAL_NAMES = { breakfast:'🌅 早餐', lunch:'☀️ 午餐', dinner:'🌙 晚餐', snack:'🍪 小吃点心' };
-const CATS = [
-  { name:'全部', emoji:'🔥' },
-  { name:'粿类', emoji:'🥟' },
-  { name:'海鲜', emoji:'🦀' },
-  { name:'卤味', emoji:'🍖' },
-  { name:'家常菜', emoji:'🏠' },
-  { name:'汤品', emoji:'🍲' },
-  { name:'小炒', emoji:'🥬' },
-  { name:'甜点', emoji:'🍯' },
-  { name:'小吃', emoji:'🥐' },
-  { name:'主食', emoji:'🍚' }
-];
-
-// ============================================================
-// 状态
-// ============================================================
-let currentTab = 'recommend';
-let currentStar = null;
-let activeCat = '全部';
-let searchKeyword = '';
-
-// ============================================================
-// 工具函数
-// ============================================================
-function hashStr(str) {
-  let hash = 0;
-  for (let i = 0; i < str.length; i++) {
-    hash = ((hash << 5) - hash) + str.charCodeAt(i);
-    hash |= 0;
-  }
-  return Math.abs(hash);
-}
-
-function seedRandom(seed) {
-  let s = seed;
-  return function() {
-    s = (s * 16807 + 0) % 2147483647;
-    return (s - 1) / 2147483646;
+    cb();
   };
+  xhr.onerror = function() { cb(); };
+  xhr.ontimeout = function() { cb(); };
+  xhr.send();
 }
 
-// ============================================================
-// 推荐引擎
-// ============================================================
+// ============ HASH ============
+function hash(s) { var h=0; for(var i=0;i<s.length;i++){h=((h<<5)-h)+s.charCodeAt(i);h|=0;} return Math.abs(h); }
+function srand(s){return function(){s=(s*16807+0)%2147483647;return(s-1)/2147483646;}}
+
+// ============ RECOMMEND ============
 function getDailyRec(date) {
-  const ds = `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`;
-  const seed = hashStr(ds);
-  const rand = seedRandom(seed);
-
-  // 按餐次分组
-  const byMeal = { breakfast:[], lunch:[], dinner:[], snack:[] };
-  DISHES.forEach(d => { if (byMeal[d.meal]) byMeal[d.meal].push(d); });
-
-  // 打乱每组的顺序
-  const shuffle = (arr, r) => {
-    const a = [...arr];
-    for (let i = a.length - 1; i > 0; i--) {
-      const j = Math.floor(r() * (i + 1));
-      [a[i], a[j]] = [a[j], a[i]];
-    }
-    return a;
-  };
-
-  const meals = ['breakfast','lunch','dinner','snack'];
-  const result = {};
-  const usedIds = new Set();
-
-  meals.forEach((meal, i) => {
-    const pool = shuffle(byMeal[meal], rand);
-    // 优先选没被用过的
-    const pick = pool.find(d => !usedIds.has(d.id)) || pool[0];
-    if (pick) {
-      usedIds.add(pick.id);
-      result[meal] = pick;
-    }
+  var ds = date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate();
+  var seed = hash(ds), rand = srand(seed);
+  var byMeal = {breakfast:[],lunch:[],dinner:[],snack:[]};
+  DISHES.forEach(function(d){ if(byMeal[d.meal]) byMeal[d.meal].push(d); });
+  var used = {}, result = {};
+  ['breakfast','lunch','dinner','snack'].forEach(function(meal,i){
+    var pool = byMeal[meal].slice();
+    // shuffle
+    for(var j=pool.length-1;j>0;j--){var k=Math.floor(rand()*(j+1));var t=pool[j];pool[j]=pool[k];pool[k]=t;}
+    var pick = null;
+    for(var j=0;j<pool.length;j++){if(!used[pool[j].id]){pick=pool[j];break;}}
+    if(!pick) pick = pool[0];
+    if(pick){used[pick.id]=true;result[meal]=pick;}
   });
-
-  // 主打星从不重复之外选
-  const starPool = shuffle(DISHES.filter(d => !usedIds.has(d.id)), rand);
-  result.star = starPool[0] || DISHES[Math.floor(rand() * DISHES.length)];
-
+  var rest = DISHES.filter(function(d){return !used[d.id];});
+  for(var i=rest.length-1;i>0;i--){var kk=Math.floor(rand()*(i+1));var tt=rest[i];rest[i]=rest[kk];rest[kk]=tt;}
+  result.star = rest[0] || DISHES[Math.floor(rand()*DISHES.length)];
   return result;
 }
-
-function getTomorrowRec() {
-  const t = new Date();
-  t.setDate(t.getDate() + 1);
+function getTomorrow() {
+  var t = new Date(); t.setDate(t.getDate()+1);
   return getDailyRec(t);
 }
 
-// ============================================================
-// 渲染推荐页
-// ============================================================
-let currentRec = null;
+// ============ STATE ============
+var currentRec = null;
+var currentStar = null;
+var currentTab = 'rec';
+var activeCat = '全部';
 
-function renderRecPage() {
-  currentRec = getTomorrowRec();
-  const meals = ['breakfast','lunch','dinner','snack'];
-  const mealList = document.getElementById('mealList');
+// ============ RENDER RECOMMEND ============
+function renderRec() {
+  currentRec = getTomorrow();
+  currentStar = currentRec.star;
 
-  mealList.innerHTML = meals.map(meal => {
-    const d = currentRec[meal];
-    if (!d) return '';
-    return `
-      <div class="meal-card ${meal}" onclick="showDetail(${d.id})">
-        <div class="meal-tag">${MEAL_NAMES[meal]}</div>
-        <div class="meal-row">
-          <span class="meal-emoji">${d.emoji}</span>
-          <div class="meal-info">
-            <div class="meal-name">${d.name}</div>
-            <div class="meal-cat">${d.cat}</div>
-          </div>
-        </div>
-        <div class="meal-desc">${d.desc}</div>
-        <div class="meal-tags">${d.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>
-      </div>`;
-  }).join('');
-
-  // 主打星
-  const s = currentRec.star;
-  currentStar = s;
-  document.getElementById('starCard').innerHTML = s ? `
-    <span class="star-emoji">${s.emoji}</span>
-    <div class="star-info">
-      <div class="star-name">${s.name}</div>
-      <div class="star-cat">${s.cat}</div>
-      <div class="star-desc">${s.desc}</div>
-    </div>
-    <span style="font-size:28px;color:#CCC;">›</span>
-  ` : '';
-}
-
-function refreshRec() {
-  // 纯随机推荐
-  const shuffled = [...DISHES].sort(() => Math.random() - 0.5);
-  const byMeal = { breakfast:[], lunch:[], dinner:[], snack:[] };
-  shuffled.forEach(d => { if (byMeal[d.meal] && byMeal[d.meal].length < 1) byMeal[d.meal].push(d); });
-
-  const usedIds = new Set();
-  const meals = ['breakfast','lunch','dinner','snack'];
-  const rec = {};
-  meals.forEach(meal => {
-    const d = byMeal[meal][0] || DISHES.find(x => x.meal === meal && !usedIds.has(x.id));
-    if (d) { usedIds.add(d.id); rec[meal] = d; }
+  var html = '';
+  ['breakfast','lunch','dinner','snack'].forEach(function(meal){
+    var d = currentRec[meal];
+    if(!d) return;
+    html += '<div class="meal-card '+meal+'" onclick="openDetail('+d.id+')">';
+    html += '<div class="meal-header">'+MEAL[meal]+'</div>';
+    html += '<div class="meal-row">';
+    html += '<span class="meal-emoji">'+d.emoji+'</span>';
+    html += '<div class="meal-info"><div class="meal-name">'+d.name+'</div><div class="meal-cat">'+d.cat+'</div></div>';
+    html += '</div>';
+    html += '<div class="meal-desc">'+d.desc+'</div>';
+    html += '<div class="tags">';
+    d.tags.forEach(function(t){ html += '<span class="tag">'+t+'</span>'; });
+    html += '</div></div>';
   });
-  rec.star = shuffled.find(d => !usedIds.has(d.id)) || DISHES[Math.floor(Math.random()*DISHES.length)];
-  currentRec = rec;
-  currentStar = rec.star;
+  document.getElementById('mealList').innerHTML = html;
 
-  // 重新渲染
-  const mealList = document.getElementById('mealList');
-  meals.forEach((meal, i) => {
-    const d = rec[meal];
-    if (!d) return;
-    const card = mealList.children[i];
-    if (card) {
-      card.className = `meal-card ${meal}`;
-      card.setAttribute('onclick', `showDetail(${d.id})`);
-      card.querySelector('.meal-emoji').textContent = d.emoji;
-      card.querySelector('.meal-name').textContent = d.name;
-      card.querySelector('.meal-cat').textContent = d.cat;
-      card.querySelector('.meal-desc').textContent = d.desc;
-      card.querySelector('.meal-tags').innerHTML = d.tags.map(t => `<span class="tag">${t}</span>`).join('');
-    }
+  var s = currentRec.star;
+  var sc = document.getElementById('starCard');
+  if(s) {
+    sc.style.display = 'flex';
+    sc.innerHTML = '<span class="star-emoji">'+s.emoji+'</span><div class="star-info"><div class="star-name">'+s.name+'</div><div class="star-cat">'+s.cat+'</div><div class="star-desc">'+s.desc+'</div></div><span style="font-size:28px;color:#CCC;">›</span>';
+  } else {
+    sc.style.display = 'none';
+  }
+}
+
+function refresh() {
+  var dishes = DISHES.slice();
+  for(var i=dishes.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=dishes[i];dishes[i]=dishes[j];dishes[j]=t;}
+  var byMeal={breakfast:[],lunch:[],dinner:[],snack:[]};
+  dishes.forEach(function(d){if(byMeal[d.meal]&&byMeal[d.meal].length<1)byMeal[d.meal].push(d);});
+  var result={},used={};
+  ['breakfast','lunch','dinner','snack'].forEach(function(m){
+    var pick=byMeal[m][0]||dishes.find(function(d){return d.meal===m&&!used[d.id];});
+    if(pick){used[pick.id]=true;result[m]=pick;}
   });
-  document.getElementById('starCard').innerHTML = rec.star ? `
-    <span class="star-emoji">${rec.star.emoji}</span>
-    <div class="star-info">
-      <div class="star-name">${rec.star.name}</div>
-      <div class="star-cat">${rec.star.cat}</div>
-      <div class="star-desc">${rec.star.desc}</div>
-    </div>
-    <span style="font-size:28px;color:#CCC;">›</span>
-  ` : '';
+  result.star=dishes.find(function(d){return!used[d.id];})||dishes[0];
+  currentRec=result;currentStar=result.star;
+  renderRec();
 
-  showToast('已刷新推荐 ✨');
-}
-
-// ============================================================
-// 渲染图鉴页
-// ============================================================
-function renderBrowsePage() {
-  // 分类标签
-  document.getElementById('catScroll').innerHTML = CATS.map(c =>
-    `<div class="cat-chip${activeCat===c.name?' active':''}" onclick="setCat('${c.name}')">${c.emoji} ${c.name}</div>`
-  ).join('');
-  applyFilter();
-}
-
-function setCat(cat) {
-  activeCat = cat;
-  renderBrowsePage();
-}
-
-function applyFilter() {
-  const kw = (document.getElementById('searchInput')?.value || '').trim().toLowerCase();
-  searchKeyword = kw;
-  document.getElementById('searchClear').style.display = kw ? 'inline' : 'none';
-
-  let list = DISHES;
-  if (activeCat !== '全部') list = list.filter(d => d.cat === activeCat);
-  if (kw) {
-    list = list.filter(d =>
-      d.name.includes(kw) || d.cat.includes(kw) || d.desc.includes(kw) ||
-      d.tags.some(t => t.includes(kw))
-    );
-  }
-
-  const container = document.getElementById('dishList');
-  if (list.length === 0) {
-    container.innerHTML = `<div class="empty"><span class="empty-icon">🍽️</span>没有找到相关美食<br><span style="font-size:12px;color:#DDD;">试试其他关键词吧</span></div>`;
-    return;
-  }
-  container.innerHTML = list.map(d => `
-    <div class="dish-card" onclick="showDetail(${d.id})">
-      <div class="dish-icon">${d.emoji}</div>
-      <div class="dish-body">
-        <div class="name">${d.name}</div>
-        <div class="meta"><span style="color:var(--red);">${d.cat}</span><span>${MEAL_NAMES[d.meal]}</span></div>
-        <div class="desc">${d.desc}</div>
-      </div>
-      <span class="dish-arrow">›</span>
-    </div>
-  `).join('');
-}
-
-function clearSearch() {
-  document.getElementById('searchInput').value = '';
-  searchKeyword = '';
-  document.getElementById('searchClear').style.display = 'none';
-  applyFilter();
-}
-
-// ============================================================
-// 详情弹窗
-// ============================================================
-function showDetail(id) {
-  const d = DISHES.find(x => x.id === id);
-  if (!d) return;
-  document.getElementById('overlay').style.display = 'flex';
-  document.getElementById('modal').innerHTML = `
-    <button class="modal-close" onclick="closeModalDirect()">✕</button>
-    <span class="modal-emoji">${d.emoji}</span>
-    <div class="modal-name">${d.name}</div>
-    <div class="modal-badges">
-      <span class="modal-badge cat">${d.cat}</span>
-      <span class="modal-badge meal">${MEAL_NAMES[d.meal]}</span>
-    </div>
-    <div class="modal-desc">${d.desc}</div>
-    <div class="modal-section">
-      <div class="label">🏷️ 标签</div>
-      <div class="modal-tags">${d.tags.map(t => `<span class="t">${t}</span>`).join('')}</div>
-    </div>
-    <div class="modal-section">
-      <div class="label">🍵 搭配建议</div>
-      <div class="pair-item"><span>🍵</span> 配一壶功夫茶，解腻回甘</div>
-      <div class="pair-item"><span>🍚</span> 搭配白粥或米饭，地道潮汕吃法</div>
-      <div class="pair-item"><span>🥢</span> 蘸普宁豆酱或鱼露，提鲜增味</div>
-    </div>
-  `;
-  document.body.style.overflow = 'hidden';
-}
-
-function closeModal(e) {
-  if (e.target === document.getElementById('overlay')) {
-    document.getElementById('overlay').style.display = 'none';
-    document.body.style.overflow = '';
-  }
-}
-function closeModalDirect() {
-  document.getElementById('overlay').style.display = 'none';
-  document.body.style.overflow = '';
-}
-
-// ============================================================
-// Tab 切换
-// ============================================================
-function switchTab(tab) {
-  currentTab = tab;
-  document.querySelectorAll('.tab').forEach(el => el.classList.toggle('active', el.dataset.tab === tab));
-  document.getElementById('page-recommend').style.display = tab === 'recommend' ? '' : 'none';
-  document.getElementById('page-browse').style.display = tab === 'browse' ? '' : 'none';
-  if (tab === 'browse') renderBrowsePage();
-}
-
-// ============================================================
-// Toast
-// ============================================================
-function showToast(msg) {
-  const t = document.createElement('div');
-  t.className = 'toast';
-  t.textContent = msg;
+  var t=document.createElement('div');
+  t.style.cssText='position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(0,0,0,0.75);color:#FFF;padding:10px 24px;border-radius:10px;font-size:14px;z-index:999;pointer-events:none;';
+  t.textContent='已刷新推荐 ✨';
   document.body.appendChild(t);
-  setTimeout(() => t.remove(), 1400);
+  setTimeout(function(){t.style.opacity='0';setTimeout(function(){t.remove();},300);},800);
 }
 
-// ============================================================
-// 初始化
-// ============================================================
-async function init() {
-  // 日期显示
-  const tomorrow = new Date();
-  tomorrow.setDate(tomorrow.getDate() + 1);
-  const wd = ['日','一','二','三','四','五','六'];
-  document.getElementById('dateDisplay').textContent =
-    `${tomorrow.getFullYear()}年${tomorrow.getMonth()+1}月${tomorrow.getDate()}日 星期${wd[tomorrow.getDay()]}`;
-
-  // 先用内置数据渲染，再异步加载远程数据
-  renderRecPage();
-  await loadDishes();
-  renderRecPage();
+// ============ BROWSE ============
+function renderBrowse() {
+  var html='';
+  CATS.forEach(function(c){
+    html+='<div class="cat-chip'+(activeCat===c.name?' active':'')+'" onclick="setCat(\''+c.name+'\')">'+c.emoji+' '+c.name+'</div>';
+  });
+  document.getElementById('catScroll').innerHTML=html;
+  filterBrowse();
+}
+function setCat(c){activeCat=c;renderBrowse();}
+function filterBrowse(){
+  var kw=(document.getElementById('searchInput').value||'').trim().toLowerCase();
+  document.getElementById('searchClear').style.display=kw?'inline':'none';
+  var list=DISHES.slice();
+  if(activeCat!=='全部')list=list.filter(function(d){return d.cat===activeCat;});
+  if(kw)list=list.filter(function(d){return d.name.indexOf(kw)>=0||d.cat.indexOf(kw)>=0||d.desc.indexOf(kw)>=0||d.tags.some(function(t){return t.indexOf(kw)>=0;});});
+  var html='';
+  if(list.length===0){
+    html='<div class="empty">🍽️<br>没有找到<br><span style="font-size:12px;color:#DDD;">试试其他关键词</span></div>';
+  }else{
+    list.forEach(function(d){
+      html+='<div class="dish-card" onclick="openDetail('+d.id+')">';
+      html+='<div class="dish-icon">'+d.emoji+'</div>';
+      html+='<div class="dish-body"><div class="name">'+d.name+'</div>';
+      html+='<div class="meta"><span style="color:var(--red)">'+d.cat+'</span><span>'+MEAL[d.meal]+'</span></div>';
+      html+='<div class="desc">'+d.desc+'</div></div>';
+      html+='<span class="dish-arrow">›</span></div>';
+    });
+  }
+  document.getElementById('dishList').innerHTML=html;
 }
 
+// ============ TAB ============
+function showTab(tab){
+  currentTab=tab;
+  var tabs=document.querySelectorAll('.tab');tabs[0].classList.toggle('active',tab==='rec');tabs[1].classList.toggle('active',tab==='browse');
+  document.getElementById('page-rec').style.display=tab==='rec'?'':'none';
+  document.getElementById('page-browse').style.display=tab==='browse'?'':'none';
+  if(tab==='browse')renderBrowse();
+}
+
+// ============ DETAIL ============
+function openDetail(id){
+  var d=DISHES.find(function(x){return x.id===id;});
+  if(!d)return;
+  document.getElementById('overlay').style.display='flex';
+  var h='<button class="modal-close" onclick="closeDetail()">✕</button>';
+  h+='<span class="modal-emoji">'+d.emoji+'</span>';
+  h+='<div class="modal-name">'+d.name+'</div>';
+  h+='<div class="modal-badges"><span class="modal-badge cat">'+d.cat+'</span><span class="modal-badge meal">'+MEAL[d.meal]+'</span></div>';
+  h+='<div class="modal-desc">'+d.desc+'</div>';
+  h+='<div class="modal-section"><div class="label">🏷️ 标签</div><div class="modal-tags">';
+  d.tags.forEach(function(t){h+='<span class="modal-tag">'+t+'</span>';});
+  h+='</div></div>';
+  h+='<div class="modal-section"><div class="label">🍵 搭配建议</div>';
+  h+='<div class="pair-item">🍵 配一壶功夫茶，解腻回甘</div>';
+  h+='<div class="pair-item">🍚 搭配白粥或米饭，地道潮汕吃法</div>';
+  h+='<div class="pair-item">🥢 蘸普宁豆酱或鱼露，提鲜增味</div>';
+  h+='</div>';
+  document.getElementById('modal').innerHTML=h;
+  document.body.style.overflow='hidden';
+}
+function closeDetail(){
+  document.getElementById('overlay').style.display='none';
+  document.body.style.overflow='';
+}
+
+// ============ INIT ============
+function init(){
+  // Set date
+  var t=new Date();t.setDate(t.getDate()+1);
+  var wd=['日','一','二','三','四','五','六'];
+  document.getElementById('dateDisplay').textContent=t.getFullYear()+'年'+(t.getMonth()+1)+'月'+t.getDate()+'日 星期'+wd[t.getDay()];
+
+  // Render immediately with whatever DISHES is (may be empty)
+  renderRec();
+
+  // Then load remote data and re-render
+  loadData(function(){
+    renderRec();
+    if(currentTab==='browse') renderBrowse();
+  });
+}
+
+// Start when DOM is ready
 document.addEventListener('DOMContentLoaded', init);
 </script>
-
 </body>
 </html>
