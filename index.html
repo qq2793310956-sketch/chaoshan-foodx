@@ -185,7 +185,19 @@ function rdr(){
 rdr();
 
 function rnd(){
-  cr=daily();
+  // 纯随机洗牌，不基于日期
+  var arr=D.slice().sort(function(){return Math.random()-0.5;});
+  var bm={};meals.forEach(function(m){bm[m]=[];});
+  arr.forEach(function(d){if(bm[d.m].length<1)bm[d.m].push(d);});
+  var used={};cr={};
+  meals.forEach(function(m){
+    var pick=bm[m][0];
+    if(!pick){for(var k=0;k<arr.length;k++){if(arr[k].m===m&&!used[arr[k].id]){pick=arr[k];break;}}}
+    if(!pick)pick=arr[0];
+    used[pick.id]=1;cr[m]=pick;
+  });
+  for(var i=0;i<arr.length;i++){if(!used[arr[i].id]){cr.star=arr[i];break;}}
+  if(!cr.star)cr.star=arr[0];
   rdr();
   var t=document.createElement('div');
   t.style.cssText='position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(0,0,0,.75);color:#FFF;padding:10px 24px;border-radius:10px;font-size:14px;z-index:999;pointer-events:none';
@@ -248,7 +260,16 @@ setTimeout(function(){
     if(x.status===200){
       try{
         var rmt=JSON.parse(x.responseText);
-        if(rmt&&rmt.length>0){D=rmt;D.forEach(function(d,i){if(!d.id)d.id=i+1;});rdr();document.getElementById('t1').textContent='🍲 明天吃啥？('+D.length+'道)';}
+        if(rmt&&rmt.length>0){
+          // 远程JSON字段名与本地不同，做映射
+          D=rmt.map(function(d){
+            var tg=d.tags;
+            if(Array.isArray(tg))tg=tg.join(',');
+            return {id:d.id,n:d.name||d.n,c:d.cat||d.c,e:d.emoji||d.e,m:d.meal||d.m,tg:tg||d.tg,d:d.desc||d.d};
+          });
+          D.forEach(function(d,i){if(!d.id)d.id=i+1;});
+          rdr();document.getElementById('t1').textContent='🍲 明天吃啥？('+D.length+'道)';
+        }
       }catch(e){}
     }
   };
