@@ -273,6 +273,7 @@ function closeM(){document.getElementById('modal').className='modal';}
 // 页面初始化
 initDate();
 render();
+document.getElementById('title').textContent = '🍲 明天吃啥？('+D.length+'道菜已加载)';
 
 // 后台加载远程 dishes.json 更新数据
 setTimeout(function(){
