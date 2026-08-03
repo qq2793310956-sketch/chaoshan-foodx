@@ -1,314 +1,169 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>明天吃啥</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;background:#FFF8F3;color:#333;max-width:500px;margin:0 auto;min-height:100vh}
-.hd{background:linear-gradient(135deg,#E85D3F,#FF7B5C,#FF9A76,#FFB347);padding:30px 16px 28px;text-align:center;color:#FFF}
-.hd h1{font-size:32px;font-weight:800}
-.hd p{font-size:13px;opacity:.9;margin:4px 0}
-.hd span{font-size:12px;background:rgba(255,255,255,.2);padding:3px 16px;border-radius:20px}
+body{font-family:-apple-system,sans-serif;background:#FFF8F3;color:#333;max-width:500px;margin:0 auto;min-height:100vh}
+.hd{background:linear-gradient(135deg,#E85D3F,#FF7B5C);padding:24px;text-align:center;color:#FFF}
 .tb{display:flex;margin:-12px 12px 0;background:#FFF;border-radius:14px;padding:3px;box-shadow:0 2px 12px rgba(0,0,0,.08);position:relative;z-index:10}
 .tb button{flex:1;padding:10px;font-size:14px;font-weight:600;border-radius:12px;border:none;background:none;color:#999;cursor:pointer}
 .tb button.on{background:#FFF0EC;color:#E85D3F}
 .sx{margin:12px}
-.sx h2{font-size:18px;margin-bottom:2px}
-.sx .nt{font-size:11px;color:#999;margin-bottom:10px}
-.cd{border-radius:14px;padding:14px;margin-bottom:10px;border-left:4px solid #DDD;cursor:pointer;background:#FFF;box-shadow:0 1px 8px rgba(0,0,0,.04)}
+h2{font-size:18px;margin-bottom:4px}
+.cd{border-radius:14px;padding:14px;margin-bottom:10px;background:#FFF;box-shadow:0 1px 8px rgba(0,0,0,.04);cursor:pointer}
 .cd:active{transform:scale(.98)}
-.cd.b0{border-left-color:#FFB347;background:#FFFDF7}
-.cd.b1{border-left-color:#E85D3F;background:#FFFDFB}
-.cd.b2{border-left-color:#6B7BD0;background:#FBFBFF}
-.cd.b3{border-left-color:#5CB85C;background:#F9FFF9}
 .cd .lb{font-size:11px;font-weight:600;color:#888;margin-bottom:6px}
 .cd .rw{display:flex;align-items:center;gap:10px}
 .cd .em{font-size:44px;flex-shrink:0}
 .cd .nm{font-size:20px;font-weight:700}
 .cd .ct{font-size:11px;color:#999}
-.cd .dc{font-size:12px;color:#777;line-height:1.5;margin-top:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.cd .dc{font-size:12px;color:#777;line-height:1.5;margin-top:6px}
 .cd .tg{display:flex;gap:5px;margin-top:8px;flex-wrap:wrap}
 .cd .tg span{font-size:10px;color:#E85D3F;background:rgba(232,93,63,.08);padding:2px 8px;border-radius:8px}
-.sr{background:#FFFEF5;border:2px solid #FFD54F;border-radius:14px;padding:14px;display:flex;align-items:center;gap:10px;cursor:pointer;box-shadow:0 2px 10px rgba(255,193,7,.15)}
-.sr .em{font-size:48px}
+.sr{background:#FFFEF5;border:2px solid #FFD54F;border-radius:14px;padding:14px;display:flex;align-items:center;gap:10px;cursor:pointer}
+.sr .em{font-size:48px;flex-shrink:0}
 .sr .nm{font-size:18px;font-weight:700}
-.sr .ct{font-size:11px;color:#999}
-.sr .dc{font-size:12px;color:#888;line-height:1.4;margin-top:2px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .bt{margin:10px 12px;display:flex;gap:8px}
 .bt button{flex:1;padding:12px;font-size:15px;font-weight:600;border-radius:40px;border:none;cursor:pointer}
-.bt .pr{background:linear-gradient(135deg,#E85D3F,#FF7B5C);color:#FFF;box-shadow:0 3px 12px rgba(232,93,63,.3)}
+.bt .pr{background:linear-gradient(135deg,#E85D3F,#FF7B5C);color:#FFF}
 .bt .sc{background:#FFF;color:#E85D3F;border:2px solid #E85D3F}
 .bt button:active{transform:scale(.96)}
-.sh{margin:10px 12px;background:#FFF;border-radius:40px;padding:8px 14px;display:flex;align-items:center;gap:6px;box-shadow:0 1px 8px rgba(0,0,0,.04)}
-.sh input{flex:1;border:none;outline:none;font-size:14px;background:none}
-.ctr{display:flex;gap:6px;padding:2px 12px 6px;overflow-x:auto;scrollbar-width:none}
-.ctr::-webkit-scrollbar{display:none}
-.ctr span{flex-shrink:0;padding:6px 12px;font-size:12px;border-radius:16px;background:#FFF;border:1px solid #EEE;cursor:pointer;white-space:nowrap}
-.ctr span.on{background:#FFF0EC;border-color:#E85D3F;color:#E85D3F;font-weight:600}
-.ls{margin:6px 12px}
-.ls .it{background:#FFF;border-radius:12px;padding:12px;display:flex;align-items:center;gap:10px;margin-bottom:8px;cursor:pointer;box-shadow:0 1px 6px rgba(0,0,0,.03)}
-.ls .it:active{transform:scale(.98)}
-.ls .ic{width:50px;height:50px;background:#FFF8F3;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:30px;flex-shrink:0}
-.ls .nm{font-size:15px;font-weight:600}
-.ls .mt{font-size:10px;color:#999}
-.ls .dc{font-size:11px;color:#AAA;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.emp{text-align:center;padding:40px;color:#CCC;font-size:14px}
-.mdl{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:200;display:none;justify-content:center;align-items:flex-end}
-.mdl.on{display:flex}
-.mdl .in{background:#FFF;border-radius:22px 22px 0 0;width:100%;max-width:500px;max-height:80vh;overflow-y:auto;padding:28px 20px 36px;animation:up .25s}
-@keyframes up{from{transform:translateY(100%)}}
-.mdl .cl{position:absolute;top:12px;right:16px;width:28px;height:28px;background:#F0F0F0;border-radius:50%;border:none;font-size:16px;cursor:pointer;color:#999}
-.mdl .em{font-size:80px;text-align:center;display:block;margin-bottom:8px}
-.mdl h3{font-size:24px;text-align:center;margin-bottom:4px}
-.mdl .bd{display:flex;justify-content:center;gap:8px;margin-bottom:14px}
-.mdl .bd span{padding:3px 14px;border-radius:14px;font-size:12px}
-.mdl .bd .cc{background:#FFF0EC;color:#E85D3F}
-.mdl .bd .mm{background:#F5F5F5;color:#666}
-.mdl .ds{font-size:14px;color:#555;line-height:1.7;margin-bottom:12px}
-.mdl .lb2{font-size:12px;font-weight:600;color:#888;margin-bottom:4px}
-.mdl .ts{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
-.mdl .ts span{font-size:11px;color:#E85D3F;background:rgba(232,93,63,.06);padding:3px 12px;border-radius:12px;border:1px solid rgba(232,93,63,.1)}
-.mdl .pr{font-size:13px;color:#666;margin-bottom:4px}
-</style>
-</head>
+</style></head>
 <body>
-<div class="hd"><h1 id="t1">🍲 明天吃啥？</h1><p>潮汕美食每日推荐</p><span id="t2"></span></div>
-<div class="tb"><button class="on" id="btn0" onclick="go(0)">🎯 推荐</button><button id="btn1" onclick="go(1)">📚 图鉴</button></div>
-<div id="p0">
-  <div class="sx"><h2>📅 明天菜单</h2><p class="nt">每天不重样</p><div id="cards"></div></div>
-  <div class="sx"><h2>⭐ 主打星</h2><div id="star"></div></div>
-  <div class="bt"><button class="pr" onclick="rnd()">🔄 换一批</button><button class="sc" onclick="go(1)">📚 看全部</button></div>
-</div>
-<div id="p1" style="display:none">
-  <div class="sh"><span>🔍</span><input id="kw" placeholder="搜索..." oninput="flt()"><span id="clr" style="display:none;cursor:pointer" onclick="document.getElementById('kw').value='';flt()">✕</span></div>
-  <div class="ctr" id="cats"></div>
-  <div class="ls" id="list"></div>
-</div>
-<div class="mdl" id="mdl" onclick="if(event.target===this)cls()"><div class="in" id="mi" style="position:relative"></div></div>
+<div class="hd"><h1>🍲 明天吃啥？</h1><p>潮汕美食每日推荐</p><p id="dbg" style="font-size:11px;opacity:.8;margin-top:4px"></p></div>
+<div class="tb"><button class="on">🎯 推荐</button><button onclick="alert('图鉴稍后')">📚 图鉴</button></div>
+<div class="sx" style="margin-top:16px"><h2>📅 明天菜单</h2><div id="cards">加载中...</div></div>
+<div class="sx"><h2>⭐ 主打星</h2><div id="star"></div></div>
+<div class="bt"><button class="pr" onclick="window.location.reload()">🔄 换一批</button></div>
 
 <script>
-var D=[];
-var meals=['breakfast','lunch','dinner','snack'];
-var ML={breakfast:'🌅 早餐',lunch:'☀️ 午餐',dinner:'🌙 晚餐',snack:'🍪 小吃点心'};
-var CS=[{n:'全部',e:'🔥'},{n:'粿类',e:'🥟'},{n:'海鲜',e:'🦀'},{n:'卤味',e:'🍖'},{n:'家常菜',e:'🏠'},{n:'汤品',e:'🍲'},{n:'小炒',e:'🥬'},{n:'甜点',e:'🍯'},{n:'小吃',e:'🥐'},{n:'主食',e:'🍚'}];
-var DATA=[
-['牛肉粿条','粿类','🍜','lunch','主食,牛肉,汤','潮汕人的灵魂食物，鲜牛肉片铺在热腾腾的粿条上，浇上滚烫的牛骨汤，配沙茶酱或辣椒酱，鲜香滑嫩。'],
-['红桃粿','粿类','🥟','breakfast','传统,糯米,节日','潮汕传统粿品，糯米粉制成桃形外皮，内馅有糯米香菇花生等，蒸熟后粉红可爱。'],
-['菜头粿','粿类','🫓','breakfast','煎炸,萝卜,小吃','萝卜糕的潮汕版本，白萝卜丝与米浆蒸制，切块煎至两面金黄，外酥里嫩。'],
-['鼠壳粿','粿类','🌿','breakfast','传统,糯米,甜品','用鼠壳草汁染成墨绿色的糯米粿，内馅豆沙或花生芝麻，带独特草本清香。'],
-['无米粿','粿类','🫕','snack','素食,煎炸,小吃','用番薯粉做皮，包入韭菜豆芽等馅料，煎至透明晶莹，外Q内香。'],
-['潮汕生腌','海鲜','🦀','dinner','生食,螃蟹,虾,重口味','被誉为潮汕毒药，酱油蒜头辣椒香菜腌制鲜活蟹虾，生猛鲜美，吃过就上瘾。'],
-['蚝烙','海鲜','🦪','lunch','煎炸,蚝,鸡蛋','鲜蚝与番薯粉浆混合煎制，加鸡蛋和葱花，煎到金黄酥脆，蚝肉鲜甜与蛋香交融。'],
-['鱼饭','海鲜','🐟','dinner','传统,冷食,鱼','新鲜海鱼直接用海水煮熟放凉，鱼肉紧实鲜甜，冷吃更显鲜美，配白粥或普宁豆酱。'],
-['虾丸虾枣','海鲜','🦐','lunch','丸子,虾,火锅','手打鲜虾肉制成，弹牙爽口虾味浓郁，可煮汤油炸或下火锅，宴席必备硬菜。'],
-['炒薄壳','海鲜','🐚','dinner','小炒,贝壳,下酒','薄壳就是海瓜子，加九层塔蒜蓉辣椒爆炒，鲜香四溢一粒一粒停不下来。'],
-['卤鹅','卤味','🦆','dinner','卤水,鹅,宴客','狮头鹅经数小时卤制，皮滑肉嫩卤香入骨，鹅肝鹅掌鹅翅鹅肠各自精彩。'],
-['卤水拼盘','卤味','🍖','dinner','卤水,拼盘,下酒','鹅肉猪耳豆干卤蛋等多样卤味切片拼盘，一碟尝遍卤水精华。'],
-['隆江猪脚饭','卤味','🍖','lunch','卤水,猪肉,米饭','源自揭阳隆江，猪脚用秘制卤水长时间熬煮，皮糯肉烂胶质满满。'],
-['牛肉丸汤','汤品','🍢','lunch','丸子,牛肉,汤','手打牛肉丸弹到可以当乒乓球打，配清汤和蒜头酥芹菜末，鲜掉眉毛。'],
-['猪肚汤','汤品','🍲','dinner','猪肚,滋补,汤','猪肚与胡椒酸菜同煲，汤色乳白，胡椒辛香暖胃驱寒，酸菜提鲜解腻。'],
-['潮汕砂锅粥','汤品','🥣','dinner','粥,海鲜,夜宵','粒粒分明米香浓郁，加入虾蟹田鸡或排骨同熬，鲜甜渗透每粒米。'],
-['芥兰炒牛肉','小炒','🥬','lunch','家常,牛肉,蔬菜','脆嫩芥兰与嫩滑牛肉片爆炒，镬气十足，芥兰清甜与牛肉鲜美相得益彰。'],
-['菜脯蛋','小炒','🍳','breakfast','家常,鸡蛋,快手','萝卜干切碎与蛋液混合煎成，咸香脆口，配白粥就是完美一餐。'],
-['潮州蒸鱼','小炒','🐠','dinner','鱼,清蒸,家常','新鲜海鱼加酸梅咸菜姜丝番茄清蒸，酸甜咸鲜层层递进。'],
-['普宁豆酱炒通菜','小炒','🥗','lunch','家常,蔬菜,素食','空心菜用普宁豆酱炒制，豆酱咸鲜酵香与脆嫩通菜是天生一对。'],
-['潮汕甜汤','甜点','🍯','snack','甜品,滋补,热食','芋头白果薏米莲子银耳等慢火熬制，温润滋补，甜而不腻。'],
-['芋泥','甜点','🍠','snack','甜品,芋头,传统','香芋蒸熟压泥，加猪油和糖炒至绵密顺滑入口即化。'],
-['绿豆爽','甜点','🫘','snack','甜品,绿豆,夏季','去皮绿豆煮至绵软加冰糖马蹄粒，清香爽口，夏天冰镇消暑解热。'],
+// 超简数据: [name, cat, emoji, meal, tags, desc]
+var RAW = [
+['牛肉粿条','粿类','🍜','lunch','主食,牛肉,汤','鲜牛肉片铺在热腾腾的粿条上，浇上滚烫牛骨汤，配沙茶酱或辣椒酱。'],
+['红桃粿','粿类','🥟','breakfast','传统,糯米,节日','糯米粉制成桃形外皮，内馅有糯米香菇花生，蒸熟后粉红可爱。'],
+['菜头粿','粿类','🫓','breakfast','煎炸,萝卜,小吃','白萝卜丝与米浆蒸制，切块煎至两面金黄，外酥里嫩。'],
+['鼠壳粿','粿类','🌿','breakfast','传统,糯米,甜品','鼠壳草汁染成墨绿色，内馅豆沙花生芝麻，草本清香。'],
+['无米粿','粿类','🫕','snack','素食,煎炸,小吃','番薯粉做皮，包入韭菜豆芽，煎至透明晶莹，外Q内香。'],
+['潮汕生腌','海鲜','🦀','dinner','生食,螃蟹,虾','誉为潮汕毒药，酱油蒜头辣椒香菜腌制鲜活蟹虾，生猛鲜美。'],
+['蚝烙','海鲜','🦪','lunch','煎炸,蚝,鸡蛋','鲜蚝与番薯粉浆混合煎制，加鸡蛋葱花，金黄酥脆。'],
+['鱼饭','海鲜','🐟','dinner','传统,冷食,鱼','新鲜海鱼直接用海水煮熟放凉，鱼肉紧实鲜甜，冷吃更鲜美。'],
+['虾丸虾枣','海鲜','🦐','lunch','丸子,虾,火锅','手打鲜虾肉制成，弹牙爽口虾味浓郁，可煮汤油炸下火锅。'],
+['炒薄壳','海鲜','🐚','dinner','小炒,贝壳,下酒','海瓜子加九层塔蒜蓉辣椒爆炒，鲜香四溢。'],
+['卤鹅','卤味','🦆','dinner','卤水,鹅,宴客','狮头鹅经数小时卤制，皮滑肉嫩卤香入骨，配蒜泥醋解腻。'],
+['卤水拼盘','卤味','🍖','dinner','卤水,拼盘,下酒','鹅肉猪耳豆干卤蛋等切片拼盘，一碟尝遍卤水精华。'],
+['隆江猪脚饭','卤味','🍖','lunch','卤水,猪肉,米饭','源自揭阳隆江，猪脚秘制卤水长时间熬煮，皮糯肉烂。'],
+['牛肉丸汤','汤品','🍢','lunch','丸子,牛肉,汤','手打牛肉丸弹到可以当乒乓球打，配清汤蒜头酥芹菜末。'],
+['猪肚汤','汤品','🍲','dinner','猪肚,滋补,汤','猪肚胡椒酸菜同煲，汤色乳白，胡椒辛香暖胃驱寒。'],
+['潮汕砂锅粥','汤品','🥣','dinner','粥,海鲜,夜宵','粒粒分明米香浓郁，加入虾蟹田鸡排骨同熬。'],
+['芥兰炒牛肉','小炒','🥬','lunch','家常,牛肉,蔬菜','脆嫩芥兰与嫩滑牛肉片爆炒，镬气十足。'],
+['菜脯蛋','小炒','🍳','breakfast','家常,鸡蛋,快手','萝卜干切碎与蛋液混合煎成，咸香脆口，配白粥完美。'],
+['潮州蒸鱼','小炒','🐠','dinner','鱼,清蒸,家常','新鲜海鱼加酸梅咸菜姜丝番茄清蒸，酸甜咸鲜。'],
+['普宁豆酱炒通菜','小炒','🥗','lunch','家常,蔬菜,素食','空心菜用普宁豆酱炒制，豆酱咸鲜与脆嫩通菜天生一对。'],
+['潮汕甜汤','甜点','🍯','snack','甜品,滋补,热食','芋头白果薏米莲子银耳慢火熬制，温润滋补。'],
+['芋泥','甜点','🍠','snack','甜品,芋头,传统','香芋蒸熟压泥，加猪油糖炒至绵密顺滑，入口即化。'],
+['绿豆爽','甜点','🫘','snack','甜品,绿豆,夏季','去皮绿豆煮至绵软加冰糖马蹄粒，清香爽口消暑解热。'],
 ['反沙芋','甜点','🧈','snack','甜品,芋头,传统','芋头条炸至金黄裹上白糖霜，外甜内酥粉糯香甜。'],
-['春卷','小吃','🥐','snack','煎炸,传统,小吃','皮薄馅大，绿豆畔肉末香菇入馅，炸至金黄酥脆，咔嚓作响满口留香。'],
-['猪肠胀糯米','小吃','🌭','snack','糯米,猪肉,传统','猪肠灌入糯米花生香菇猪肉，煮熟切片蘸甜酱油或桔油，糯香与腊味交融。'],
-['肠粉','小吃','📜','breakfast','米浆,早餐,快手','比广式更薄更滑，内馅丰富有牛肉猪肉虾仁鸡蛋生菜，淋特制酱汁和蒜头油。'],
-['炒糕粿','小吃','🧈','snack','煎炸,米浆,传统','米浆糕切块煎至两面金黄，加鸡蛋豆芽韭菜同炒，外焦里糯。'],
-['潮州粥','主食','🍚','breakfast','粥,家常,日常','米粒分明米汤清甜，配橄榄菜咸菜菜脯蛋卤味等各种杂咸。'],
-['戈饭','主食','🍛','lunch','米饭,家常,芋头','芋头腊肉香菇等与米饭同煮，开锅时香气四溢，每粒米都吸饱了食材精华。'],
-['猪排','家常菜','🍖','lunch','猪肉,煎炸,家常','大块猪排腌制入味后煎至两面金黄，外酥里嫩肉汁饱满。'],
+['春卷','小吃','🥐','snack','煎炸,传统,小吃','皮薄馅大，绿豆畔肉末香菇入馅，炸至金黄酥脆。'],
+['猪肠胀糯米','小吃','🌭','snack','糯米,猪肉,传统','猪肠灌入糯米花生香菇猪肉，煮熟切片蘸甜酱油桔油。'],
+['肠粉','小吃','📜','breakfast','米浆,早餐,快手','比广式更薄更滑，内馅丰富，淋特制酱汁和蒜头油。'],
+['炒糕粿','小吃','🧈','snack','煎炸,米浆,传统','米浆糕切块煎至金黄，加鸡蛋豆芽韭菜同炒，外焦里糯。'],
+['潮州粥','主食','🍚','breakfast','粥,家常,日常','米粒分明米汤清甜，配橄榄菜咸菜菜脯蛋卤味。'],
+['戈饭','主食','🍛','lunch','米饭,家常,芋头','芋头腊肉香菇与米饭同煮，开锅香气四溢。'],
+['猪排','家常菜','🍖','lunch','猪肉,煎炸,家常','大块猪排腌制入味后煎至两面金黄，外酥里嫩。'],
 ['小酥肉','家常菜','🥩','snack','猪肉,煎炸,小吃','猪肉条裹薄面糊炸至金黄酥脆，外酥里嫩咸香可口。'],
-['可乐鸡翅','家常菜','🍗','lunch','鸡肉,可乐,家常','鸡翅用可乐酱油炖煮，甜咸交织色泽红亮，鸡肉嫩滑入味。'],
-['青椒炒肉','家常菜','🫑','lunch','猪肉,辣椒,家常','猪肉片与青椒爆炒，肉嫩椒香镬气十足，下饭一绝。'],
+['可乐鸡翅','家常菜','🍗','lunch','鸡肉,可乐,家常','鸡翅用可乐酱油炖煮，甜咸交织色泽红亮。'],
+['青椒炒肉','家常菜','🫑','lunch','猪肉,辣椒,家常','猪肉片与青椒爆炒，肉嫩椒香镬气十足。'],
 ['炒花甲','海鲜','🐚','dinner','贝壳,小炒,下酒','花甲吐沙后加蒜蓉辣椒爆炒，壳开肉嫩鲜美多汁。'],
-['蒜香螃蟹','海鲜','🦀','dinner','螃蟹,蒜香,宴客','螃蟹斩件加大量蒜蓉爆炒，蒜香四溢蟹肉鲜甜，吮指回味。'],
-['茄子煲','家常菜','🍆','lunch','蔬菜,家常,下饭','茄子过油后入砂锅焖煮，加肉末酱汁，软糯入味咸香微辣。'],
-['苦瓜炒蛋','家常菜','🥒','lunch','鸡蛋,苦瓜,家常','苦瓜切薄片与鸡蛋同炒，苦中回甘蛋香浓郁，清热解暑。'],
-['西红柿炒蛋','家常菜','🍅','lunch','鸡蛋,番茄,家常,快手','番茄酸甜与鸡蛋嫩滑完美融合，简单快手却百吃不厌。'],
-['炒莲藕','家常菜','🪷','lunch','蔬菜,家常,清爽','莲藕切片清炒，脆嫩爽口清甜回甘，加少许醋更添风味。'],
-['红烧排骨','家常菜','🍖','dinner','猪肉,红烧,硬菜','排骨焯水后加酱油糖色慢炖，肉质酥烂酱香浓郁色泽红亮。'],
-['炸鸡翅','小吃','🍗','snack','鸡肉,煎炸,小吃','鸡翅腌制后裹粉油炸至金黄酥脆，外皮香脆肉质嫩滑多汁。'],
-['炒空心菜','家常菜','🥬','lunch','蔬菜,家常,快手','空心菜摘段猛火快炒加蒜末提香，碧绿脆嫩蒜香扑鼻。'],
+['蒜香螃蟹','海鲜','🦀','dinner','螃蟹,蒜香,宴客','螃蟹斩件加大量蒜蓉爆炒，蒜香四溢蟹肉鲜甜。'],
+['茄子煲','家常菜','🍆','lunch','蔬菜,家常,下饭','茄子过油入砂锅焖煮，加肉末酱汁，软糯入味。'],
+['苦瓜炒蛋','家常菜','🥒','lunch','鸡蛋,苦瓜,家常','苦瓜切薄片与鸡蛋同炒，苦中回甘蛋香浓郁。'],
+['西红柿炒蛋','家常菜','🍅','lunch','鸡蛋,番茄,家常,快手','番茄酸甜与鸡蛋嫩滑完美融合，简单快手百吃不厌。'],
+['炒莲藕','家常菜','🪷','lunch','蔬菜,家常,清爽','莲藕切片清炒，脆嫩爽口清甜回甘。'],
+['红烧排骨','家常菜','🍖','dinner','猪肉,红烧,硬菜','排骨加酱油糖色慢炖，肉质酥烂酱香浓郁。'],
+['炸鸡翅','小吃','🍗','snack','鸡肉,煎炸,小吃','鸡翅腌制裹粉油炸至金黄酥脆，外皮香脆内里多汁。'],
+['炒空心菜','家常菜','🥬','lunch','蔬菜,家常,快手','空心菜摘段猛火快炒加蒜末，碧绿脆嫩蒜香扑鼻。'],
 ['鲍鱼汤','汤品','🥣','dinner','海鲜,滋补,高档','鲜活鲍鱼与鸡肉瑶柱等同炖，汤色清澈鲜味醇厚。'],
-['玉米排骨汤','汤品','🌽','dinner','排骨,玉米,滋补','排骨与甜玉米慢火熬煮，汤色乳白玉米清甜融入骨汤。'],
-['虫草花鸡肉汤','汤品','🍄','dinner','鸡肉,滋补,药膳','虫草花与土鸡同炖，金黄澄澈菌香四溢，滋补养颜。'],
-['竹笋汤','汤品','🎋','lunch','竹笋,清淡,汤','鲜竹笋切片与排骨或鸡骨架煲汤，清甜鲜嫩笋香馥郁。'],
+['玉米排骨汤','汤品','🌽','dinner','排骨,玉米,滋补','排骨与甜玉米慢火熬煮，汤色乳白玉米清甜。'],
+['虫草花鸡肉汤','汤品','🍄','dinner','鸡肉,滋补,药膳','虫草花与土鸡同炖，金黄澄澈菌香四溢。'],
+['竹笋汤','汤品','🎋','lunch','竹笋,清淡,汤','鲜竹笋切片与排骨煲汤，清甜鲜嫩笋香馥郁。'],
 ['竹笋炒肉','家常菜','🎋','lunch','竹笋,猪肉,家常','鲜嫩竹笋与猪肉片爆炒，笋脆肉嫩清爽鲜香。'],
 ['小番茄','小吃','🍅','snack','水果,清爽,零食','新鲜小番茄洗净即食，酸甜多汁清爽解腻。'],
 ['杏鲍菇炒牛肉','家常菜','🍄','dinner','牛肉,菌菇,下饭','杏鲍菇切条与嫩牛肉片同炒，菇肉弹牙牛肉嫩滑。'],
-['湿炒牛肉','家常菜','🥩','lunch','牛肉,湿炒,潮汕','潮汕湿炒做法，牛肉片滑嫩多汁勾薄芡，配芥兰或青椒拌饭一绝。'],
-['炒粉','主食','🍝','lunch','粉面,家常,快手','米粉或河粉加鸡蛋豆芽肉丝猛火快炒，干香入味镬气十足。'],
-['炒饭','主食','🍚','lunch','米饭,家常,快手','隔夜米饭加鸡蛋火腿虾仁等炒制，粒粒分明香浓可口。']
+['湿炒牛肉','家常菜','🥩','lunch','牛肉,湿炒,潮汕','牛肉片滑嫩多汁勾薄芡，配芥兰或青椒拌饭一绝。'],
+['炒粉','主食','🍝','lunch','粉面,家常,快手','米粉河粉加鸡蛋豆芽肉丝猛火快炒，干香入味。'],
+['炒饭','主食','🍚','lunch','米饭,家常,快手','隔夜米饭加鸡蛋火腿虾仁炒制，粒粒分明香浓可口。']
 ];
 
-// 把数组数据转为对象，分配 id
-DATA.forEach(function(a,i){
-  D.push({id:i+1,n:a[0],c:a[1],e:a[2],m:a[3],t:a[4].split(','),d:a[5]});
-});
+// 把RAW转成dishes对象
+var D=[];
+for(var i=0;i<RAW.length;i++){
+  var a=RAW[i];
+  D.push({id:i+1,n:a[0],c:a[1],e:a[2],m:a[3],tg:a[4],d:a[5]});
+}
+document.getElementById('dbg').textContent=D.length+'道菜已载入';
 
-var ac='全部';
-var cr=null;
-var cs=null;
+var ML={breakfast:'🌅 早餐',lunch:'☀️ 午餐',dinner:'🌙 晚餐',snack:'🍪 小吃点心'};
+var meals=['breakfast','lunch','dinner','snack'];
+var colors=['#FFB347','#E85D3F','#6B7BD0','#5CB85C'];
 
-// 哈希和伪随机
-function H(s){var h=0,i;for(i=0;i<s.length;i++){h=((h<<5)-h)+s.charCodeAt(i);h|=0;}return Math.abs(h);}
-function R(s){return function(){s=(s*16807)%2147483647;return(s-1)/2147483646;}}
+// 简单哈希
+function H(s){var h=0;for(var i=0;i<s.length;i++){h=((h<<5)-h)+s.charCodeAt(i);h|=0;}return Math.abs(h);}
 
-// 生成每日推荐
-function daily(dt){
-  var ds=dt.getFullYear()+'-'+(dt.getMonth()+1)+'-'+dt.getDate();
-  var r=R(H(ds));
+// 每日推荐
+function daily(){
+  var t=new Date();t.setDate(t.getDate()+1);
+  var ds=t.getFullYear()+'-'+(t.getMonth()+1)+'-'+t.getDate();
+  var seed=H(ds);
+
   // 按餐次分桶
   var bm={};meals.forEach(function(m){bm[m]=[];});
   D.forEach(function(d){bm[d.m].push(d);});
-  // 每个桶里挑一个（去重）
+
+  // 从每个桶里根据seed取一道菜
   var used={},o={};
-  meals.forEach(function(m){
-    var pool=bm[m].slice();
-    // 洗牌
-    for(var i=pool.length-1;i>0;i--){var j=Math.floor(r()*(i+1));var t=pool[i];pool[i]=pool[j];pool[j]=t;}
-    // 选第一个没用过的
+  meals.forEach(function(m,i){
+    var pool=bm[m];
+    var idx=(seed+i*7+Math.floor(seed/(i+1)))%pool.length;
     var pick=null;
-    for(var k=0;k<pool.length;k++){if(!used[pool[k].id]){pick=pool[k];break;}}
-    if(!pick)pick=pool[0];
+    // 尝试找没用过的
+    for(var k=0;k<pool.length;k++){
+      var candidate=pool[(idx+k)%pool.length];
+      if(!used[candidate.id]){pick=candidate;break;}
+    }
+    if(!pick)pick=pool[idx];
     used[pick.id]=1;o[m]=pick;
   });
+
   // 主打星
-  var rest=D.filter(function(d){return !used[d.id];});
-  for(var i=rest.length-1;i>0;i--){var j=Math.floor(r()*(i+1));var t=rest[i];rest[i]=rest[j];rest[j]=t;}
-  o.star=rest[0]||D[0];
+  var rest=[];
+  D.forEach(function(d){if(!used[d.id])rest.push(d);});
+  o.star=rest[(seed*13)%rest.length];
   return o;
 }
 
-// 页面渲染
-function rdr(){
-  var t=new Date();t.setDate(t.getDate()+1);
-  cr=daily(t);cs=cr.star;
-  // 构建卡片
-  var h='';
-  var cls=['b0','b1','b2','b3'];
-  meals.forEach(function(m,i){
-    var d=cr[m];if(!d)return;
-    h+='<div class="cd '+cls[i]+'" onclick="det('+d.id+')">';
-    h+='<div class="lb">'+ML[m]+'</div>';
-    h+='<div class="rw"><span class="em">'+d.e+'</span><div><div class="nm">'+d.n+'</div><div class="ct">'+d.c+'</div></div></div>';
-    h+='<div class="dc">'+d.d+'</div><div class="tg">';
-    d.t.forEach(function(tg){h+='<span>'+tg+'</span>';});
-    h+='</div></div>';
-  });
-  document.getElementById('cards').innerHTML=h;
-  // 主打星
-  var s=cr.star;
-  document.getElementById('star').innerHTML=s?
-    '<div class="sr" onclick="det('+s.id+')"><span class="em">'+s.e+'</span><div style="flex:1"><div class="nm">'+s.n+'</div><div class="ct">'+s.c+'</div><div class="dc">'+s.d+'</div></div><span style="font-size:24px;color:#CCC;">›</span></div>':'';
-  // 更新标题
-  document.getElementById('t1').textContent='🍲 明天吃啥？('+D.length+'道)';
-}
+var cr=daily();
 
-// 随机换一批
-function rnd(){
-  var arr=D.slice().sort(function(){return Math.random()-0.5;});
-  var bm={};meals.forEach(function(m){bm[m]=[];});
-  arr.forEach(function(d){if(bm[d.m].length<1)bm[d.m].push(d);});
-  var used={},o={};
-  meals.forEach(function(m){
-    var pick=bm[m][0]||arr.find(function(d){return d.m===m&&!used[d.id];});
-    if(pick){used[pick.id]=1;o[m]=pick;}
-  });
-  o.star=arr.find(function(d){return !used[d.id];})||arr[0];
-  cr=o;cs=o.star;
-  rdr();
-}
-
-// 日期
-function dtStr(){
-  var t=new Date();t.setDate(t.getDate()+1);
-  var wd=['日','一','二','三','四','五','六'];
-  document.getElementById('t2').textContent=t.getFullYear()+'年'+(t.getMonth()+1)+'月'+t.getDate()+'日 星期'+wd[t.getDay()];
-}
-
-// 切换 tab
-function go(n){
-  document.getElementById('btn0').className=n===0?'on':'';
-  document.getElementById('btn1').className=n===1?'on':'';
-  document.getElementById('p0').style.display=n===0?'':'none';
-  document.getElementById('p1').style.display=n===1?'':'none';
-  if(n===1)mkBrowse();
-}
-
-// 图鉴页
-function mkBrowse(){
-  var h='';
-  CS.forEach(function(c){h+='<span class="'+(ac===c.n?'on':'')+'" onclick="setCat(\''+c.n+'\')">'+c.e+' '+c.n+'</span>';});
-  document.getElementById('cats').innerHTML=h;
-  flt();
-}
-function setCat(c){ac=c;mkBrowse();}
-function flt(){
-  var kw=(document.getElementById('kw').value||'').trim().toLowerCase();
-  document.getElementById('clr').style.display=kw?'inline':'none';
-  var l=D.slice();
-  if(ac!=='全部')l=l.filter(function(d){return d.c===ac;});
-  if(kw)l=l.filter(function(d){return d.n.indexOf(kw)>=0||d.c.indexOf(kw)>=0||d.t.join('').indexOf(kw)>=0;});
-  var h='';
-  if(l.length===0){
-    h='<div class="emp">🍽️ 没有找到</div>';
-  }else{
-    l.forEach(function(d){
-      h+='<div class="it" onclick="det('+d.id+')"><div class="ic">'+d.e+'</div><div style="flex:1;min-width:0"><div class="nm">'+d.n+'</div><div class="mt"><span style="color:#E85D3F">'+d.c+'</span> '+ML[d.m]+'</div><div class="dc">'+d.d+'</div></div><span style="font-size:20px;color:#CCC;">›</span></div>';
-    });
+// 渲染
+var h='';
+meals.forEach(function(m,i){
+  var d=cr[m];
+  if(!d){
+    h+='<div class="cd"><div class="rw"><span class="em">❓</span><div><div class="nm">BUG: '+m+' 无数据</div></div></div></div>';
+    return;
   }
-  document.getElementById('list').innerHTML=h;
-}
+  h+='<div class="cd" style="border-left:4px solid '+colors[i]+'">';
+  h+='<div class="lb">'+ML[m]+'</div>';
+  h+='<div class="rw"><span class="em">'+d.e+'</span><div style="flex:1"><div class="nm">'+d.n+'</div><div class="ct">'+d.c+'</div></div></div>';
+  h+='<div class="dc">'+d.d+'</div>';
+  h+='<div class="tg">';
+  var tags=d.tg.split(',');
+  for(var j=0;j<tags.length;j++){h+='<span>'+tags[j]+'</span>';}
+  h+='</div></div>';
+});
+document.getElementById('cards').innerHTML=h;
 
-// 详情弹窗
-function det(id){
-  var d=D.find(function(x){return x.id===id;});if(!d)return;
-  document.getElementById('mdl').className='mdl on';
-  var h='<button class="cl" onclick="cls()">✕</button>';
-  h+='<span class="em">'+d.e+'</span><h3>'+d.n+'</h3>';
-  h+='<div class="bd"><span class="cc">'+d.c+'</span><span class="mm">'+ML[d.m]+'</span></div>';
-  h+='<div class="ds">'+d.d+'</div>';
-  h+='<div class="lb2">🏷️ 标签</div><div class="ts">';
-  d.t.forEach(function(t){h+='<span>'+t+'</span>';});
-  h+='</div><div class="lb2">🍵 搭配建议</div>';
-  h+='<div class="pr">🍵 配一壶功夫茶，解腻回甘</div>';
-  h+='<div class="pr">🍚 搭配白粥或米饭，地道吃法</div>';
-  h+='<div class="pr">🥢 蘸普宁豆酱或鱼露，提鲜增味</div>';
-  document.getElementById('mi').innerHTML=h;
-}
-function cls(){document.getElementById('mdl').className='mdl';}
-
-// ===== 启动 =====
-dtStr();
-rdr();
-
-// 后台加载远程 JSON
-setTimeout(function(){
-  var x=new XMLHttpRequest();
-  x.open('GET','https://qq2793310956-sketch.github.io/chaoshan-foodx/dishes.json?v=7',true);
-  x.timeout=5000;
-  x.onload=function(){
-    if(x.status===200){
-      try{
-        var rmt=JSON.parse(x.responseText);
-        if(rmt&&rmt.length>0){
-          D=rmt;D.forEach(function(d,i){if(!d.id)d.id=i+1;});
-          rdr();
-        }
-      }catch(e){}
-    }
-  };
-  x.send();
-},300);
+// 主打星
+var s=cr.star;
+document.getElementById('star').innerHTML='<div class="sr"><span class="em">'+s.e+'</span><div style="flex:1"><div class="nm">'+s.n+'</div><div class="ct">'+s.c+'</div><div style="font-size:12px;color:#888">'+s.d+'</div></div><span style="font-size:24px;color:#CCC;">›</span></div>';
 </script>
-</body>
-</html>
+</body></html>
