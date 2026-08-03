@@ -381,17 +381,19 @@
 // ============================================================
 // 潮汕美食数据库（从外部 JSON 加载，修改后自动生效）
 // ============================================================
-let DISHES = [];
-const DISHES_URL = 'https://qq2793310956-sketch.github.io/chaoshan-foodx/dishes.json';
+let DISHES = null; // 稍后在 BACKUP_DISHES 定义后初始化
+const DISHES_URL = 'https://qq2793310956-sketch.github.io/chaoshan-foodx/dishes.json?v=3';
 
 async function loadDishes() {
   try {
-    const resp = await fetch(DISHES_URL);
+    const resp = await fetch(DISHES_URL, { cache: 'no-cache' });
     if (!resp.ok) throw new Error('HTTP ' + resp.status);
-    DISHES = await resp.json();
+    const remoteData = await resp.json();
+    if (Array.isArray(remoteData) && remoteData.length > 0) {
+      DISHES = remoteData;
+    }
   } catch(e) {
-    // 如果加载失败，用内置兜底数据
-    DISHES = BACKUP_DISHES;
+    // 加载失败，继续用内置数据
   }
   return DISHES;
 }
@@ -458,6 +460,8 @@ const BACKUP_DISHES = [
   { id:52, name:'炒粉',       cat:'主食', emoji:'🍝', meal:'lunch',    tags:['粉面','家常','快手'],   desc:'米粉或河粉加鸡蛋、豆芽、肉丝猛火快炒，干香入味、镬气十足，街头最受欢迎的主食。' },
   { id:53, name:'炒饭',       cat:'主食', emoji:'🍚', meal:'lunch',    tags:['米饭','家常','快手'],   desc:'隔夜米饭加鸡蛋、火腿、虾仁等配料炒制，粒粒分明、香浓可口，一碟满足。' },
 ];
+// 用备份数据初始化 DISHES，确保页面始终有内容
+DISHES = [...BACKUP_DISHES];
 
 const MEAL_NAMES = { breakfast:'🌅 早餐', lunch:'☀️ 午餐', dinner:'🌙 晚餐', snack:'🍪 小吃点心' };
 const CATS = [
@@ -767,7 +771,8 @@ async function init() {
   document.getElementById('dateDisplay').textContent =
     `${tomorrow.getFullYear()}年${tomorrow.getMonth()+1}月${tomorrow.getDate()}日 星期${wd[tomorrow.getDay()]}`;
 
-  // 先从外部加载菜单数据，再渲染
+  // 先用内置数据渲染，再异步加载远程数据
+  renderRecPage();
   await loadDishes();
   renderRecPage();
 }
